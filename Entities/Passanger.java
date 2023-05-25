@@ -23,4 +23,17 @@ public class Passanger {
         this.actualTravelTime = expectedTravelTime;
 
     }
+
+    //Getters, Setters...
+    public void setOnCorrectTrack(boolean bool) { this.onCorrectTrack = bool; }
+    public void increaseHappiness(int amount) { this.happiness += amount; }
+    public void changeArrivalTrack(int trackNo) { this.arrivalTrack = trackNo; }
+    public void increaseTravelTime(int time) { this.actualTravelTime += time; }
+    public int getHappiness() { return this.happiness;}
+    public int getArrivalTrack() { return this.arrivalTrack; }
+    public int getDestinationID() { return this.destinationID; }
+    public int getExpectedTravelTime() { return this.expectedTravelTime;}
+    public int getActualTravelTime() { return this.actualTravelTime; }
+    public int getTicketPrice() { return this.ticketPrice; }
+    public boolean isOnCorrectTrack() { return this.onCorrectTrack; }
 }
