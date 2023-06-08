@@ -110,7 +110,7 @@ public class TrainStation extends Model{
         Experiment trainStationExperiment = new Experiment("TrainStationExperiment");
 
         
-        TrainStation trainStationModel = new TrainStation(null, "TrainStation", true, true, 1, 6);
+        TrainStation trainStationModel = new TrainStation(null, "TrainStation", true, true, 1, Config.NUM_TRACKS.getValue());
 
         trainStationModel.connectToExperiment(trainStationExperiment);
 
