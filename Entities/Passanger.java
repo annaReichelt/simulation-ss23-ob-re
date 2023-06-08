@@ -1,7 +1,9 @@
 package Entities;
 import java.util.HashSet;
 
-public class Passanger {
+import desmoj.core.simulator.*;
+
+public class Passanger extends Entity{
 
     //100 as base happiness
     private int happiness = 100;
@@ -13,7 +15,8 @@ public class Passanger {
     private int actualTravelTime;
     private int ticketPrice;
     
-    public Passanger(int destinationID, int expectedTravelTime, int ticketPrice) {
+    public Passanger(Model owner, String name, boolean showInTrace, int destinationID, int expectedTravelTime, int ticketPrice) {
+        super(owner, name, showInTrace);
 
         this.destinationID = destinationID;
         this.expectedTravelTime = expectedTravelTime;

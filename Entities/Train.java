@@ -1,8 +1,9 @@
 package Entities;
 
 import java.util.HashSet;
+import desmoj.core.simulator.*;
 
-public class Train {
+public class Train extends Entity{
     
     private HashSet<Passanger> passengersOnTrain;
     private int expectedArrivalTime;
@@ -15,7 +16,8 @@ public class Train {
     //we may not need this
     private int amountOfPassangers;
 
-    public Train(int trainID, int arrivalTime, int arrivalTrack, int waitingTime) {
+    public Train(Model owner, String name, boolean showInTrace, int trainID, int arrivalTime, int arrivalTrack, int waitingTime) {
+        super(owner, name, showInTrace);
         this.trainID = trainID;
         this.expectedArrivalTime = arrivalTime;
         this.expectedArrivalTrack = arrivalTrack;
