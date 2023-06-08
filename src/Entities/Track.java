@@ -1,4 +1,4 @@
-package Entities;
+package src.Entities;
 
 import desmoj.core.simulator.*;
 

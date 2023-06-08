@@ -1,4 +1,4 @@
-package Policy;
+package src.Policy;
 
 import javax.swing.event.AncestorEvent;
 

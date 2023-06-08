@@ -1,4 +1,4 @@
-package Entities;
+package src.Entities;
 
 import java.util.HashSet;
 import desmoj.core.simulator.*;

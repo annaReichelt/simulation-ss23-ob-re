@@ -1,7 +1,7 @@
-
-import Entities.*;
+package src;
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.simulator.*;
+import src.Entities.*;
 
 public class TrainStation extends Model{
 
