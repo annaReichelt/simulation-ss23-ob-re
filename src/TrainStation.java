@@ -41,7 +41,14 @@ public class TrainStation extends Model{
 
     public boolean isTrackAvailable(int trackNo) {
         trackNo--;
-        return trainTracks[trackNo].isAvailable();
+        return trainTracks[trackNo].isFree();
+    }
+
+    public int getFreeTrackNo() {
+        for (int i = 0; i < trainTracks.length; i++) {
+            if (trainTracks[i].isFree()) return i+1;
+        }
+        return -1;
     }
 
     //Getters, Setters...
@@ -63,7 +70,7 @@ public class TrainStation extends Model{
     }
 
     // if no track is available, the train has to wait
-    protected Queue<Train> trainQueue;
+    public Queue<Train> trainQueue;
 
     public String description() {
         return "This model describes a train station with " + trainTracks.length + " tracks.";

@@ -21,6 +21,7 @@ public class Train extends Entity{
         this.trainID = trainID;
         this.expectedArrivalTime = arrivalTime;
         this.expectedArrivalTrack = arrivalTrack;
+        this.actualArrivalTrack = arrivalTrack;
         this.waitingTime = waitingTime;
 
         //We assume that we at least arrive at the expected time
@@ -42,4 +43,33 @@ public class Train extends Entity{
         //Todo: fill the train with passangers
     }
 
+
+    //gettters, setters...
+    public int getExpectedArrivalTime() {
+        return expectedArrivalTime;
+    }
+
+    public int getActualArrivalTime() {
+        return actualArrivalTime;
+    }
+
+    public int getWaitingTime() {
+        return waitingTime;
+    }
+
+    public int getExpectedArrivalTrack() {
+        return expectedArrivalTrack;
+    }
+
+    public int getActualArrivalTrack() {
+        return actualArrivalTrack;
+    }
+
+    public int getTrainID() {
+        return trainID;
+    }
+
+    public void setActualArrivalTrack(int actualArrivalTrack) {
+        this.actualArrivalTrack = actualArrivalTrack;
+    }
 }

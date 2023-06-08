@@ -12,4 +12,12 @@ public class Track extends Entity {
         this.trackNumber = trackNumber;
     }
 
+    public boolean isFree() {
+        return isFree;
+    }
+
+    public void setFree(boolean bool) {
+        this.isFree = bool;
+    }
+
 }
