@@ -1,29 +1,48 @@
 package src;
+import java.util.ArrayList;
+
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.simulator.*;
 import src.Entities.*;
+import src.RouteData.*;
+import src.Events.*;
 
 public class TrainStation extends Model{
 
     private int revenewFromTicketSales = 0;
     private int lossesFromRefunds = 0;
     private int delayOfAllTrains = 0;
-    private int stationID;
+    private String stationName;
+    private StationGenerator sg;
 
     private Track[] trainTracks;
 
-    public TrainStation(Model owner, String name, boolean showInReport, 
-            boolean showIntrace, int stationID, int amountOfTracks) {
+    /*public TrainStation(Model owner, String name, boolean showInReport, 
+            boolean showIntrace, String stationName, int amountOfTracks) {
         super(owner, name, showInReport, showIntrace);
-        this.trainTracks = new Track[amountOfTracks];
-        this.stationID = stationID;
+        this.stationName = stationName;
 
-        createTracks();
+        createTracksPrimitive(amountOfTracks);
+    }*/
+
+    public TrainStation(Model owner, String name, boolean showInReport, 
+            boolean showIntrace) {
+        // implemention with real Data
+        super(owner, name, showInReport, showIntrace);
     }
 
-    private void createTracks() {
+    private void createTracksPrimitive(int amountOfTracks) {
+        this.trainTracks = new Track[amountOfTracks];
         for (int i = 0; i < trainTracks.length; i++) {
             trainTracks[i] = new Track(this, "Track " + (i+1), true, i+1);
+        }
+    }
+
+    private void createTracks(int amountOfTracks) {
+        this.trainTracks = new Track[amountOfTracks];
+        ArrayList<Integer> trackIDs = sg.getTrackIDs();
+        for (int i = 0; i < trainTracks.length; i++) {
+            trainTracks[i] = new Track(this, "Track " + trackIDs.get(i), true, i+1);
         }
     }
 
@@ -54,7 +73,7 @@ public class TrainStation extends Model{
     //Getters, Setters...
     public void addLosses(int amount) { this.lossesFromRefunds += amount; }
     public void addTicketPrice(int price) { this.revenewFromTicketSales += price; }
-    public int getStationID() { return this.stationID; }
+    public String getStationName() { return this.stationName; }
     public int getdelayOfAllTrains() { return this.delayOfAllTrains; }
     public int getRevenue() { return this.revenewFromTicketSales; }
     public int getProfit() { return this.revenewFromTicketSales - this.lossesFromRefunds; }
@@ -77,8 +96,8 @@ public class TrainStation extends Model{
     }
 
     public void doInitialSchedules() {
-        // TODO 
-
+        EventGenerator eg = new EventGenerator(this, "EventGenerator", true);
+        eg.schedule(new TimeInstant(0.0));
     }
 
     public void init() {
@@ -99,7 +118,9 @@ public class TrainStation extends Model{
         delayTime = new ContDistExponential(this, "DelayTime", 3.0, true, true);
         delayTime.setNonNegative(true);
 
-        createTracks();
+        sg = StationGenerator.getInstance();
+        this.stationName = sg.getMainsStaion();
+        createTracks(sg.getTrackNumber());
     }
 
     public static void main(String[] args) {
@@ -110,14 +131,14 @@ public class TrainStation extends Model{
         Experiment trainStationExperiment = new Experiment("TrainStationExperiment");
 
         
-        TrainStation trainStationModel = new TrainStation(null, "TrainStation", true, true, 1, Config.NUM_TRACKS.getValue());
+        TrainStation trainStationModel = new TrainStation(null, "TrainStation", true, true);
 
         trainStationModel.connectToExperiment(trainStationExperiment);
 
         trainStationExperiment.tracePeriod(new TimeInstant(0.0), new TimeInstant(60));
         trainStationExperiment.debugPeriod(new TimeInstant(0.0), new TimeInstant(60));
 
-        trainStationExperiment.stop(new TimeInstant(60 * 24));
+        trainStationExperiment.stop(new TimeInstant(60 * 24 * 7));
 
         trainStationExperiment.start();
 

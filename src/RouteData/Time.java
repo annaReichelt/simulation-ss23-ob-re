@@ -46,4 +46,49 @@ public class Time implements Comparable<Time>{
         return hour + ":" + minute + ":" + second;
     }
 
+    public Time add(Time other) {
+        int newHour = this.hour + other.hour;
+        int newMinute = this.minute + other.minute;
+        int newSecond = this.second + other.second;
+        if (newSecond >= 60) {
+            newSecond -= 60;
+            newMinute++;
+        }
+        if (newMinute >= 60) {
+            newMinute -= 60;
+            newHour++;
+        }
+        return new Time(newHour, newMinute, newSecond);
+    }
+
+    public Time subtract(Time other) {
+        int newHour = this.hour - other.hour;
+        int newMinute = this.minute - other.minute;
+        int newSecond = this.second - other.second;
+        if (newSecond < 0) {
+            newSecond += 60;
+            newMinute--;
+        }
+        if (newMinute < 0) {
+            newMinute += 60;
+            newHour--;
+        }
+        return new Time(newHour, newMinute, newSecond);
+    }
+
+    public Time difference(Time other) {
+        int newHour = this.hour - other.hour;
+        int newMinute = this.minute - other.minute;
+        int newSecond = this.second - other.second;
+        if (newSecond < 0) {
+            newSecond += 60;
+            newMinute--;
+        }
+        if (newMinute < 0) {
+            newMinute += 60;
+            newHour--;
+        }
+        return new Time(Math.abs(newHour),Math.abs(newMinute) , Math.abs(newSecond));
+    }
+
 }

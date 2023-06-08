@@ -39,8 +39,8 @@ public class RouteData {
         return trackNumber;
     }
 
-    public ArrayList<String> getTrackIDs() {
-        return trackIDs;
+    public ArrayList<Integer> getTrackIDs() {
+        return trackNumbers;
     }
 
     public TreeMultiset<StationData> getStationsServed() {
@@ -155,10 +155,10 @@ public class RouteData {
     public static void main(String[] args) {
         RouteData routeData = new RouteData("Salzburg Hauptbahnhof");
         TreeMultiset<StationData> data = routeData.getStationsServed();
-        for(int i = 0; i < data.size(); i++) {
-            //System.out.println(data.get(i).getStationName() + " " + data.get(i).getTrackNumber() + " " + data.get(i).getArrivalTime() + " " + data.get(i).getDepartureTime() + " " + data.get(i).getAddInfo() + " " + data.get(i).getWeek());
+        for(StationData station : data) {
+            System.out.println(station.getStationName() + " " + station.getTrackNumber() + " " + station.getArrivalTime() + " " + station.getDepartureTime() + " " + station.getAddInfo() + " " + station.getWeek());
         }
-
+        System.out.println(data.pollFirstEntry().getElement());
     }
 
 }

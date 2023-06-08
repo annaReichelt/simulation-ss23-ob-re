@@ -2,23 +2,23 @@ package src.Entities;
 
 import java.util.HashSet;
 import desmoj.core.simulator.*;
+import src.*;
+import src.RouteData.*;
 
 public class Train extends Entity{
     
     private HashSet<Passanger> passengersOnTrain;
-    private int expectedArrivalTime;
-    private int actualArrivalTime;
-    private int waitingTime;
+    private Time expectedArrivalTime;
+    private Time actualArrivalTime;
+    private Time waitingTime;
     private int expectedArrivalTrack;
     private int actualArrivalTrack;
-    private int trainID;
 
     //we may not need this
     private int amountOfPassangers;
 
-    public Train(Model owner, String name, boolean showInTrace, int trainID, int arrivalTime, int arrivalTrack, int waitingTime) {
+    public Train(Model owner, String name, boolean showInTrace,  Time arrivalTime, int arrivalTrack, Time waitingTime) {
         super(owner, name, showInTrace);
-        this.trainID = trainID;
         this.expectedArrivalTime = arrivalTime;
         this.expectedArrivalTrack = arrivalTrack;
         this.actualArrivalTrack = arrivalTrack;
@@ -45,15 +45,15 @@ public class Train extends Entity{
 
 
     //gettters, setters...
-    public int getExpectedArrivalTime() {
+    public Time getExpectedArrivalTime() {
         return expectedArrivalTime;
     }
 
-    public int getActualArrivalTime() {
+    public Time getActualArrivalTime() {
         return actualArrivalTime;
     }
 
-    public int getWaitingTime() {
+    public Time getWaitingTime() {
         return waitingTime;
     }
 
@@ -65,11 +65,11 @@ public class Train extends Entity{
         return actualArrivalTrack;
     }
 
-    public int getTrainID() {
-        return trainID;
-    }
-
     public void setActualArrivalTrack(int actualArrivalTrack) {
         this.actualArrivalTrack = actualArrivalTrack;
+    }
+
+    public void addActualArrivalTime(Time actualArrivalTime) {
+        this.actualArrivalTime = actualArrivalTime.add(actualArrivalTime);
     }
 }
