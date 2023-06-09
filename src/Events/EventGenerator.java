@@ -20,14 +20,14 @@ public class EventGenerator extends ExternalEvent{
         if (sd == null) {
             return;
         }
-        Train train = new Train(trainStation, sd.getTripID(), true, sd.getArrivalTime(), sd.getTrackNumber(), new Time(0, 0, (int)(trainStation.getDelayTime())));
+        Train train = new Train(trainStation, sd.getTripID(), true, sd.getArrivalTime(), sd.getTrackNumber(), new Time(trainStation.getDelayTime()));
         int addInfo = sd.getAddInfo();
         if (addInfo != 1) {
             //TODO: add passangers
         }
 
-        TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, sd.getStationName(), true);
-        tae.schedule(train, sd.getDepartureTime().toTimeInstant());
+        TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugausfahrt " + train.getName(), true);
+        tae.schedule(train, sd.getArrivalTime().toTimeInstant());
         
 
     }

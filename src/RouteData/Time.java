@@ -22,6 +22,12 @@ public class Time implements Comparable<Time>{
         this.second = second;
     }
 
+    public Time(double minutes) {
+        this.hour = (int)minutes / 60;
+        this.minute = (int)minutes % 60;
+        this.second = (int)(minutes * 60) % 60;
+    }
+
     /**
      * Compares this time to another time.
      * @param other the other time
@@ -100,6 +106,10 @@ public class Time implements Comparable<Time>{
 
     public TimeInstant toTimeInstant() {
         return new TimeInstant(hour *60 + minute + second / 60);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new Time(1.5));
     }
 
 }

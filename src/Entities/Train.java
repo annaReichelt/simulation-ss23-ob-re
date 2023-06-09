@@ -10,19 +10,21 @@ public class Train extends Entity{
     private HashSet<Passanger> passengersOnTrain;
     private Time expectedArrivalTime;
     private Time actualArrivalTime;
-    private Time waitingTime;
+    private Time expectedDepartureTime;
+    private Time actualDepartureTime;
     private int expectedArrivalTrack;
     private int actualArrivalTrack;
 
     //we may not need this
     private int amountOfPassangers;
 
-    public Train(Model owner, String name, boolean showInTrace,  Time arrivalTime, int arrivalTrack, Time waitingTime) {
+    public Train(Model owner, String name, boolean showInTrace,  Time arrivalTime, int arrivalTrack, Time expectedDepartureTime) {
         super(owner, name, showInTrace);
         this.expectedArrivalTime = arrivalTime;
         this.expectedArrivalTrack = arrivalTrack;
         this.actualArrivalTrack = arrivalTrack;
-        this.waitingTime = waitingTime;
+        this.expectedDepartureTime = expectedDepartureTime;
+        this.actualDepartureTime = expectedDepartureTime;
 
         //We assume that we at least arrive at the expected time
         this.actualArrivalTime = arrivalTime;
@@ -53,8 +55,12 @@ public class Train extends Entity{
         return actualArrivalTime;
     }
 
-    public Time getWaitingTime() {
-        return waitingTime;
+    public Time getExpectedDepartureTime() {
+        return expectedDepartureTime;
+    }
+
+    public Time getActualDepartureTime() {
+        return actualDepartureTime;
     }
 
     public int getExpectedArrivalTrack() {
@@ -69,7 +75,25 @@ public class Train extends Entity{
         this.actualArrivalTrack = actualArrivalTrack;
     }
 
-    public void addActualArrivalTime(Time actualArrivalTime) {
+    public Time addToArrivalTime(Time actualArrivalTime) {
         this.actualArrivalTime = actualArrivalTime.add(actualArrivalTime);
+        return this.actualArrivalTime;
     }
+
+    public Time addToArrivalTime(double minutes) {
+        this.actualArrivalTime = actualArrivalTime.add(new Time(minutes));
+        return this.actualArrivalTime;
+    }
+
+    public Time addToDepartureTime(Time actualDepartureTime) {
+        this.actualDepartureTime = actualDepartureTime.add(actualDepartureTime);
+        return this.actualDepartureTime;
+    }
+
+    public Time addToDepartureTime(double minutes) {
+        this.actualDepartureTime = actualDepartureTime.add(new Time(minutes));
+        return this.actualDepartureTime;
+    }
+
+
 }
