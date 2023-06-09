@@ -58,6 +58,34 @@ public class Week {
         return sunday;
     }
 
+    public boolean isActive(Time time) {
+        int hour = time.getHour();
+        int day = (int)Math.floor(hour / 24);
+        return isActive(day);
+    }
+
+    public boolean isActive(int day) {
+        day = day % 7;
+        switch(day) {
+            case 0:
+                return monday;
+            case 1:
+                return tuesday;
+            case 2:
+                return wednesday;
+            case 3:
+                return thursday;
+            case 4:
+                return friday;
+            case 5:
+                return saturday;
+            case 6:
+                return sunday;
+            default:
+                return false;
+        }
+    } 
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if(monday) {

@@ -73,6 +73,6 @@ public class StationData implements Comparable<StationData>{
     }
 
     public String toString() {
-        return stationName + " " + trackNumber + " " + arrivalTime + " " + departureTime + " " + addInfo;
+        return stationName + " " + trackNumber + " " + arrivalTime + " " + departureTime + " " + addInfo + " " + activeDays;
     }
 }

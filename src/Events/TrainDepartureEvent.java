@@ -23,7 +23,8 @@ public class TrainDepartureEvent extends Event<Train>{
         if(!model.trainQueue.isEmpty()) {
             Train nextTrain = model.trainQueue.first();
             model.trainQueue.remove(nextTrain);
-            TrainArrivalEvent newEvent = new TrainArrivalEvent(model, "Zugeinfahrt", isCurrent());
+            nextTrain.setActualArrivalTrack(train.getActualArrivalTrack());
+            TrainArrivalEvent newEvent = new TrainArrivalEvent(model, "Zugeinfahrt nach Warten " + nextTrain.getName(), true);
             newEvent.schedule(nextTrain, new TimeSpan(5.0)); //5 minutes for switching tracks
         }
         

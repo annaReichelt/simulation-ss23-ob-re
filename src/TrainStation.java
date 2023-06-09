@@ -14,6 +14,7 @@ public class TrainStation extends Model{
     private int delayOfAllTrains = 0;
     private String stationName;
     private StationGenerator sg;
+    public int totalTrains = 0;
 
     private Track[] trainTracks;
 
@@ -59,8 +60,12 @@ public class TrainStation extends Model{
     }
 
     public boolean isTrackAvailable(int trackNo) {
-        trackNo--;
-        return trainTracks[trackNo].isFree();
+        for(Track track : trainTracks) {
+            if(track.getTrackNo() == trackNo) {
+                return track.isFree();
+            }
+        }
+        return false;
     }
 
     public int getFreeTrackNo() {
@@ -85,7 +90,8 @@ public class TrainStation extends Model{
     private ContDistExponential delayTime;
 
     public double getDelayTime() {
-        return delayTime.sample();
+        return 0.0;
+//        return delayTime.sample();
     }
 
     // if no track is available, the train has to wait
@@ -135,8 +141,8 @@ public class TrainStation extends Model{
 
         trainStationModel.connectToExperiment(trainStationExperiment);
 
-        trainStationExperiment.tracePeriod(new TimeInstant(0.0), new TimeInstant(60));
-        trainStationExperiment.debugPeriod(new TimeInstant(0.0), new TimeInstant(60));
+        trainStationExperiment.tracePeriod(new TimeInstant(0.0), new TimeInstant(10*60));
+        trainStationExperiment.debugPeriod(new TimeInstant(0.0), new TimeInstant(10*60));
 
         trainStationExperiment.stop(new TimeInstant(60 * 24 * 7));
 
@@ -145,5 +151,6 @@ public class TrainStation extends Model{
         trainStationExperiment.report();
 
         trainStationExperiment.finish();
+        System.out.println(trainStationModel.totalTrains);
     }
 }

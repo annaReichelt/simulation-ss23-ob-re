@@ -29,6 +29,11 @@ public class StationGenerator {
     }
 
     public StationData getNextStationData(){
+        if(data.isEmpty()){
+            System.out.println("Route is empty, starting again");
+            // if the data is empty, we start the schedule again
+            data = routeData.getStationsServed();
+        }
         return data.pollFirstEntry().getElement();
     }
 
@@ -52,7 +57,5 @@ public class StationGenerator {
             }
         }
         return nextStations;
-    }
-
-
+    }  
 }

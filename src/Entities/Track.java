@@ -20,4 +20,7 @@ public class Track extends Entity {
         this.isFree = bool;
     }
 
+    public int getTrackNo() {
+        return trackNumber;
+    }
 }

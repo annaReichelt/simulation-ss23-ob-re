@@ -17,9 +17,11 @@ public class Train extends Entity{
 
     //we may not need this
     private int amountOfPassangers;
+    TrainStation station;
 
     public Train(Model owner, String name, boolean showInTrace,  Time arrivalTime, int arrivalTrack, Time expectedDepartureTime) {
         super(owner, name, showInTrace);
+        this.station = (TrainStation) owner;
         this.expectedArrivalTime = arrivalTime;
         this.expectedArrivalTrack = arrivalTrack;
         this.actualArrivalTrack = arrivalTrack;
@@ -75,24 +77,25 @@ public class Train extends Entity{
         this.actualArrivalTrack = actualArrivalTrack;
     }
 
-    public Time addToArrivalTime(Time actualArrivalTime) {
-        this.actualArrivalTime = actualArrivalTime.add(actualArrivalTime);
+    public Time addToArrivalTime(Time incTime) {
+        actualArrivalTime = actualArrivalTime.add(incTime);
+        if(actualArrivalTime.compareTo(actualDepartureTime) > 0) {
+            actualDepartureTime = actualArrivalTime;
+        }
         return this.actualArrivalTime;
     }
 
     public Time addToArrivalTime(double minutes) {
-        this.actualArrivalTime = actualArrivalTime.add(new Time(minutes));
-        return this.actualArrivalTime;
+        return addToArrivalTime(new Time(minutes));
     }
 
-    public Time addToDepartureTime(Time actualDepartureTime) {
-        this.actualDepartureTime = actualDepartureTime.add(actualDepartureTime);
+    public Time addToDepartureTime(Time incTime) {
+        actualDepartureTime = actualDepartureTime.add(incTime);
         return this.actualDepartureTime;
     }
 
     public Time addToDepartureTime(double minutes) {
-        this.actualDepartureTime = actualDepartureTime.add(new Time(minutes));
-        return this.actualDepartureTime;
+        return addToDepartureTime(new Time(minutes));
     }
 
 

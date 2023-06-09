@@ -44,7 +44,13 @@ public class RouteData {
     }
 
     public TreeMultiset<StationData> getStationsServed() {
-        return stationsServed;
+        // copy the data
+        TreeMultiset<StationData> copy = TreeMultiset.create();
+        for(StationData station : stationsServed){
+            copy.add(station);
+        }
+        System.out.println("Stations served: " + copy.size());
+        return copy;
     }
 
     private void crunchData() {
@@ -155,10 +161,16 @@ public class RouteData {
     public static void main(String[] args) {
         RouteData routeData = new RouteData("Salzburg Hauptbahnhof");
         TreeMultiset<StationData> data = routeData.getStationsServed();
-        for(StationData station : data) {
+        System.out.println(data.size());
+        /*for(StationData station : data) {
             System.out.println(station.getStationName() + " " + station.getTrackNumber() + " " + station.getArrivalTime() + " " + station.getDepartureTime() + " " + station.getAddInfo() + " " + station.getWeek());
+        }*/
+        for(int i = 0; i < 10; i++) {
+            System.out.println(data.pollFirstEntry().getElement());
         }
-        System.out.println(data.pollFirstEntry().getElement());
+
+
+
     }
 
 }

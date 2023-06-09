@@ -19,25 +19,23 @@ public class TrainArrivalEvent extends Event<Train>{
     }
 
     public void eventRoutine(Train train) {
-        // generate new EventGenerator
-        EventGenerator eg = new EventGenerator(model, "EventGenerator", true);
-        eg.schedule(new TimeSpan(0.0));
 
         int trackNumber = train.getActualArrivalTrack();
         if(model.isTrackAvailable(trackNumber)) {
             model.getTrackNo(trackNumber).setFree(false);
             //TODO: passanger stuff
-            TrainDepartureEvent newEvent = new TrainDepartureEvent(model, "Zugausfahrt " + train.getName(), isCurrent());
+            TrainDepartureEvent newEvent = new TrainDepartureEvent(model, "Zugausfahrt " + train.getName(), true);
             newEvent.schedule(train, train.addToDepartureTime(model.getDelayTime()).toTimeInstant());
         }
         else {
-            train.setActualArrivalTrack(model.getFreeTrackNo());
-            if(train.getActualArrivalTrack() == -1) {
+            int newTrackNo = model.getFreeTrackNo();
+            if(newTrackNo== -1) {
                 // no free track available
                 model.trainQueue.insert(train);
             }
             else {
-                TrainArrivalEvent newEvent = new TrainArrivalEvent(model, getName() + " new Track", isCurrent());
+                train.setActualArrivalTrack(newTrackNo);
+                TrainArrivalEvent newEvent = new TrainArrivalEvent(model, getName() + " new Track", true);
                 newEvent.schedule(train, new TimeSpan(0.0)); //for now switching tracks is free
             }
         }

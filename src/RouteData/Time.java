@@ -105,11 +105,21 @@ public class Time implements Comparable<Time>{
     }
 
     public TimeInstant toTimeInstant() {
-        return new TimeInstant(hour *60 + minute + second / 60);
+        return new TimeInstant(hour *60 + minute + second / 60.0);
     }
 
-    public static void main(String[] args) {
-        System.out.println(new Time(1.5));
+    //getter 
+
+    public int getHour() {
+        return hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public int getSecond(){
+        return second;
     }
 
 }
