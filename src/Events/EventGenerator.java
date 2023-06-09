@@ -17,13 +17,17 @@ public class EventGenerator extends ExternalEvent{
     public void eventRoutine() {
         StationGenerator sg = StationGenerator.getInstance();
         StationData sd = sg.getNextStationData();
-        Train train = new Train(trainStation, sd.getTripID(), true, sd.getArrivalTime(), sd.getTrackNumber(), new Time(0, 0, (int)(trainStation.getDelayTime())));
-        if(sd == null)
+        if (sd == null) {
             return;
+        }
+        Train train = new Train(trainStation, sd.getTripID(), true, sd.getArrivalTime(), sd.getTrackNumber(), new Time(0, 0, (int)(trainStation.getDelayTime())));
         int addInfo = sd.getAddInfo();
         if (addInfo != 1) {
             //TODO: add passangers
-        }   
+        }
+
+        TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, sd.getStationName(), true);
+        tae.schedule(train, sd.getDepartureTime().toTimeInstant());
         
 
     }

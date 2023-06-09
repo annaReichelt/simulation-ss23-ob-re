@@ -40,5 +40,19 @@ public class StationGenerator {
         return routeData.getTrackIDs();
     }
 
+    public ArrayList<StationData> getNextStaionsUntil(Time time){
+        ArrayList<StationData> nextStations = new ArrayList<StationData>();
+        for(StationData station : data){
+            if(station.getArrivalTime().compareTo(time) == -1){
+                nextStations.add(station);
+            }
+            else{
+                // because the data is sorted by time, we can break here
+                break;
+            }
+        }
+        return nextStations;
+    }
+
 
 }

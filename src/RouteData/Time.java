@@ -1,5 +1,7 @@
 package src.RouteData;
 
+import desmoj.core.simulator.*;
+
 public class Time implements Comparable<Time>{
     
     public int hour;
@@ -20,6 +22,11 @@ public class Time implements Comparable<Time>{
         this.second = second;
     }
 
+    /**
+     * Compares this time to another time.
+     * @param other the other time
+     * @return -1 if this time is before the other time, 1 if this time is after the other time, 0 if they are equal
+     */
     public int compareTo(Time other) {
         if (this.hour < other.hour) {
             return -1;
@@ -89,6 +96,10 @@ public class Time implements Comparable<Time>{
             newHour--;
         }
         return new Time(Math.abs(newHour),Math.abs(newMinute) , Math.abs(newSecond));
+    }
+
+    public TimeInstant toTimeInstant() {
+        return new TimeInstant(hour *60 + minute + second / 60);
     }
 
 }
