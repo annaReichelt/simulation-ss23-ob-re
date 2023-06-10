@@ -9,8 +9,8 @@ import src.Events.*;
 
 public class TrainStation extends Model{
 
-    private int revenewFromTicketSales = 0;
-    private int lossesFromRefunds = 0;
+    private double revenewFromTicketSales = 0;
+    private double lossesFromRefunds = 0;
     private int delayOfAllTrains = 0;
     private String stationName;
     private StationGenerator sg;
@@ -47,7 +47,6 @@ public class TrainStation extends Model{
         }
     }
 
-    
     /**
      * Gets you the specified track within the station
      * @param number of track (ID)
@@ -76,12 +75,12 @@ public class TrainStation extends Model{
     }
 
     //Getters, Setters...
-    public void addLosses(int amount) { this.lossesFromRefunds += amount; }
-    public void addTicketPrice(int price) { this.revenewFromTicketSales += price; }
+    public void addLosses(double amount) { this.lossesFromRefunds += amount; }
+    public void addRevenue(double price) { this.revenewFromTicketSales += price; }
     public String getStationName() { return this.stationName; }
     public int getdelayOfAllTrains() { return this.delayOfAllTrains; }
-    public int getRevenue() { return this.revenewFromTicketSales; }
-    public int getProfit() { return this.revenewFromTicketSales - this.lossesFromRefunds; }
+    public double getRevenue() { return this.revenewFromTicketSales; }
+    public double getProfit() { return this.revenewFromTicketSales - this.lossesFromRefunds; }
 
 
 
