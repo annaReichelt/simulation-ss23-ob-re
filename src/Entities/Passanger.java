@@ -4,6 +4,7 @@ import java.util.Random;
 
 import desmoj.core.simulator.*;
 import src.TrainStation;
+import src.RouteData.Time;
 
 public class Passanger extends Entity {
 
@@ -12,12 +13,18 @@ public class Passanger extends Entity {
     private boolean onCorrectTrack = false;
 
     private int arrivalTrack;
+
     private String destinationName;
     private int expectedTravelTime;
     private int actualTravelTime;
     private double ticketPrice;
 
-    TrainStation StationModel;
+    private TrainStation StationModel;
+    private Train arrTrain;
+    private Train depTrain = null;
+
+    //Track that the passanger needs to go to, if he changes trains
+    private int targetTrack;
     
     public Passanger(Model owner, String name, boolean showInTrace) {
         super(owner, name, showInTrace);
@@ -37,14 +44,12 @@ public class Passanger extends Entity {
      * @param train that the passanger will be traveling in first (ie. the train in which the pass. is instanciated)
      */
     public void createTravelRoute(int caseID, Train train) {
-        
         if (caseID == 0) {
             createDirectTravelRoute(train);
 
         } else if (caseID == 1) {
             createRouteWithTrainChange(train);
         }
-
     }
 
     //No changing train is required | Travel ends in salzburg
@@ -73,17 +78,44 @@ public class Passanger extends Entity {
         StationModel.addRevenue(rdPrice);
     }
 
-
-    //Changing trains is required && Travel does NOT end in salzburg
+    /**
+     * Uses the model Queue to find the next train leaving Salzburg 10 - 59 minutes after planned arrival and assigns
+     * that train as the connecting train, which the passanger subscribes to. 
+     * 
+     * We assume that the first available train in that time frame is their connecting train due to their implecable travel planning skillz
+     * 
+     * @param train that the passanger starts in
+     */
     private void createRouteWithTrainChange(Train train) {
 
-        //Take a train that stops in salzburg
-        //look for trains leaving salzburg approx. 10 - 60 minutes after arrival of the original train -> Do we have such a mechanic yet?
-        //Take one of those connecting trains at random
-        //Assign that to the travel route of this passanger
-        //Subscribe passanger to the connecting train to get updates on track changes
+        Time arrivalTime = train.getExpectedArrivalTime();
+        Time difference;
+        Time otherArrivalTime;
+
+        for (Train connectingTrain : StationModel.trainQueue) {
+            otherArrivalTime = connectingTrain.getExpectedArrivalTime();
+
+            if (arrivalTime.compareTo(otherArrivalTime) == -1) {
+                difference = arrivalTime.difference(otherArrivalTime);
+                
+                //difference needs to be larger than 10 minutes and smaller than 59 minutes (for simplicity to avoid dealing with 1h) 
+                if (difference.hour == 0 && difference.minute > 10) {
+
+                    //this is the connecting train for this passanger
+                    this.depTrain = connectingTrain;
+                    subscribeToConnectingTrain(connectingTrain);
+                }
+            }
+        }
     }
 
+    private void subscribeToConnectingTrain(Train train) {
+        train.addSubscriber(this);
+    }
+
+    public void updateTargetTrack(int trackNo) {
+        this.targetTrack = trackNo;
+    }
 
     //Getters, Setters...
     public void setOnCorrectTrack(boolean bool) { this.onCorrectTrack = bool; }

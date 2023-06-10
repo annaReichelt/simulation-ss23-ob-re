@@ -104,6 +104,13 @@ public class Time implements Comparable<Time>{
         return new Time(Math.abs(newHour),Math.abs(newMinute) , Math.abs(newSecond));
     }
 
+    /*
+     * Converts Time to minutes while ignoring seconds.
+     */
+    public int toMinutes() {
+        return (hour * 60) + minute;
+    }
+
     public TimeInstant toTimeInstant() {
         return new TimeInstant(hour *60 + minute + second / 60.0);
     }

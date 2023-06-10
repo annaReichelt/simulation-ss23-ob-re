@@ -1,5 +1,6 @@
 package src.Entities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import desmoj.core.simulator.*;
 import src.*;
@@ -8,6 +9,7 @@ import src.RouteData.*;
 public class Train extends Entity{
     
     private HashSet<Passanger> passengersOnTrain;
+    private ArrayList<Passanger> futureTravelers = new ArrayList<Passanger>();
     private Time expectedArrivalTime;
     private Time actualArrivalTime;
     private Time expectedDepartureTime;
@@ -47,6 +49,22 @@ public class Train extends Entity{
         //Todo: fill the train with passangers
     }
 
+    public void addSubscriber(Passanger traveler) {
+        futureTravelers.add(traveler);
+    }
+
+    private void announceTrackChange() {
+
+        //inform future travelers where they need to go
+        for (Passanger traveler : futureTravelers) {
+            traveler.updateTargetTrack(this.actualArrivalTrack);
+        }
+
+        //inform current travelers where they will end up
+        for (Passanger traveler : passengersOnTrain) {
+            traveler.changeArrivalTrack(this.actualArrivalTrack);
+        }
+    }
 
     //gettters, setters...
     public Time getExpectedArrivalTime() {
@@ -75,6 +93,7 @@ public class Train extends Entity{
 
     public void setActualArrivalTrack(int actualArrivalTrack) {
         this.actualArrivalTrack = actualArrivalTrack;
+        announceTrackChange();
     }
 
     public Time addToArrivalTime(Time incTime) {
