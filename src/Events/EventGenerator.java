@@ -3,6 +3,7 @@ package src.Events;
 import desmoj.core.simulator.*;
 import src.RouteData.*;
 import src.*;
+import src.Entities.Passanger;
 import src.Entities.Train;
 
 public class EventGenerator extends ExternalEvent{
@@ -69,20 +70,23 @@ public class EventGenerator extends ExternalEvent{
 
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
-
-        /**
-         * Note: Aktuell werden alle Züge nacheinander instanziiert (wie gewollt) allerding befinden wir uns damit in der Situation, dass im ersten
-         * Zug niemals ein passagier sitzen darf, der einen anschlusszug verfolgen muss (da keiner vorhanden in der sim)
-         * 
-         * V1: Im Initial schedule direkt x Züge in den Bahnhof instanziieren ohne passanger?
-         * V2: Forcen, dass in der ersten runde kein Umstieg vorkommen 
-         * 
-         * Passagiere die Umsteigen -> Aus der Queue einen Zug nehmen, der weiter fährt von salzburg aus, und den als folgezug auswählen
-         *  
-         */
         
         // generate new EventGenerator
+        //TODO: Not a todo but suggestion: Remove this and throw the entire thing into a loop with i = amount of trains in the next 7x 24 hours?
         EventGenerator eg = new EventGenerator(trainStation, "EventGenerator", true);
         eg.schedule(arrivalTime.toTimeInstant());
+    }
+
+    /**
+     * Creates passangers for a train. The remaining data for the class vars is then pulled from RouteData
+     * @param name of the Passanger
+     * @param train the Passanger will be traveling in
+     * @return passanger object
+     */
+    private Passanger createPassanger(String name, Train train) {
+        Passanger passanger = new Passanger(trainStation, name, true);
+        passanger.createTravelRoute(train);
+
+        return passanger;
     }
 }

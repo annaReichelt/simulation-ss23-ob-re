@@ -3,6 +3,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 import desmoj.core.simulator.*;
+import src.Config;
 import src.TrainStation;
 import src.RouteData.Time;
 
@@ -52,6 +53,24 @@ public class Passanger extends Entity {
         }
     }
 
+    /**
+     * Creates a random travel route for the passanger based on the current train queue. 
+     * The randomization decides, whether or not the route will be direct, or a train change is required
+     * @param train
+     */
+    public void createTravelRoute(Train train) {
+
+        Random rd = new Random();
+        double rdValue = rd.nextDouble(100);
+
+        if (rdValue <= 50) {
+            createDirectTravelRoute(train);
+
+        } else {
+            createRouteWithTrainChange(train);
+        }
+    }
+
     //No changing train is required | Travel ends in salzburg
     private void createDirectTravelRoute(Train train) {
 
@@ -65,7 +84,8 @@ public class Passanger extends Entity {
             this.destinationName = "Salzburg Hauptbahnhof";
         } else {
             //TODO: Fix later for reliable identification
-            this.destinationName = "Beyond"; //Where exactly does not matter
+            //Where exactly does not matter to us
+            this.destinationName = "Beyond"; 
         }
         collectTicketPayment();
     }
@@ -92,6 +112,11 @@ public class Passanger extends Entity {
         Time difference;
         Time otherArrivalTime;
 
+        //Security for the first instanciated train of the sim
+        if (StationModel.trainQueue.isEmpty()) {
+            createDirectTravelRoute(train);
+        }
+
         for (Train connectingTrain : StationModel.trainQueue) {
             otherArrivalTime = connectingTrain.getExpectedArrivalTime();
 
@@ -99,14 +124,19 @@ public class Passanger extends Entity {
                 difference = arrivalTime.difference(otherArrivalTime);
                 
                 //difference needs to be larger than 10 minutes and smaller than 59 minutes (for simplicity to avoid dealing with 1h) 
-                if (difference.hour == 0 && difference.minute > 10) {
+                if (difference.hour == 0 && difference.minute > Config.MIN_CHANGE_TIME.getValue()) {
 
                     //this is the connecting train for this passanger
                     this.depTrain = connectingTrain;
                     subscribeToConnectingTrain(connectingTrain);
+                    collectTicketPayment();
+                    return;
                 }
             }
         }
+
+        //security if no matching train was found -> would otherwise create passangers without a route
+        createDirectTravelRoute(train);
     }
 
     private void subscribeToConnectingTrain(Train train) {
