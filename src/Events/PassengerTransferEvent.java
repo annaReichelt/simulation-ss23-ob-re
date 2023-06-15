@@ -2,18 +2,26 @@ package src.Events;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.*;
+import src.TrainStation;
+import src.Entities.*;
 
-public class PassengerTransferEvent extends Event{
+public class PassengerTransferEvent extends Event<Passanger>{
 
-    public PassengerTransferEvent(Model arg0, String arg1, boolean arg2) {
-        super(arg0, arg1, arg2);
-        //TODO Auto-generated constructor stub
+    TrainStation model;
+
+    public PassengerTransferEvent(Model model, String name, boolean showInTrace) {
+        super(model, name, showInTrace);
+        this.model = (TrainStation) model;
     }
 
+    //Assume, only travelers who need to change trains go through this routine
     @Override
-    public void eventRoutine(Entity arg0) throws SuspendExecution {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eventRoutine'");
+    public void eventRoutine(Passanger traveler) throws SuspendExecution {
+        
+        
+        //Is passanger on the right track?
+
+
     }
     
 }

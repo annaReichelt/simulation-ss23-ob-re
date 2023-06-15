@@ -67,6 +67,15 @@ public class Train extends Entity{
     }
 
     //gettters, setters...
+
+    public HashSet<Passanger> getPassangersOnTrain() {
+        return this.passengersOnTrain;
+    }
+
+    public boolean removePassanger(Passanger passanger) {
+        return this.passengersOnTrain.remove(passanger);
+    }
+
     public Time getExpectedArrivalTime() {
         return expectedArrivalTime;
     }

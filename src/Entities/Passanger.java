@@ -23,6 +23,7 @@ public class Passanger extends Entity {
     private TrainStation StationModel;
     private Train arrTrain;
     private Train depTrain = null;
+    private int travelRouteAttribute;   //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train
 
     //Track that the passanger needs to go to, if he changes trains
     private int targetTrack;
@@ -82,10 +83,12 @@ public class Passanger extends Entity {
 
         if (rdValue <= 50) {
             this.destinationName = "Salzburg Hauptbahnhof";
+            this.travelRouteAttribute = 0;
         } else {
             //TODO: Fix later for reliable identification
             //Where exactly does not matter to us
-            this.destinationName = "Beyond"; 
+            this.destinationName = "Beyond";
+            this.travelRouteAttribute = 1; 
         }
         collectTicketPayment();
     }
@@ -128,6 +131,7 @@ public class Passanger extends Entity {
 
                     //this is the connecting train for this passanger
                     this.depTrain = connectingTrain;
+                    this.travelRouteAttribute = 2;
                     subscribeToConnectingTrain(connectingTrain);
                     collectTicketPayment();
                     return;
@@ -148,6 +152,7 @@ public class Passanger extends Entity {
     }
 
     //Getters, Setters...
+    public int getTravelRoutAttribute() { return this.travelRouteAttribute; }
     public void setOnCorrectTrack(boolean bool) { this.onCorrectTrack = bool; }
     public void increaseHappiness(int amount) { this.happiness += amount; }
     public void changeArrivalTrack(int trackNo) { this.arrivalTrack = trackNo; }
