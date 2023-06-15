@@ -22,11 +22,11 @@ public class Passanger extends Entity {
 
     private TrainStation StationModel;
     private Train arrTrain;
-    private Train depTrain = null;
+    private Train connectingTrain = null;
     private int travelRouteAttribute;   //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train
 
     //Track that the passanger needs to go to, if he changes trains
-    private int targetTrack;
+    public int targetTrack;
     
     public Passanger(Model owner, String name, boolean showInTrace) {
         super(owner, name, showInTrace);
@@ -130,7 +130,7 @@ public class Passanger extends Entity {
                 if (difference.hour == 0 && difference.minute > Config.MIN_CHANGE_TIME.getValue()) {
 
                     //this is the connecting train for this passanger
-                    this.depTrain = connectingTrain;
+                    this.connectingTrain = connectingTrain;
                     this.travelRouteAttribute = 2;
                     subscribeToConnectingTrain(connectingTrain);
                     collectTicketPayment();
@@ -165,4 +165,5 @@ public class Passanger extends Entity {
     public double getTicketPrice() { return this.ticketPrice; }
     public int getTravelRoutAttribute() { return this.travelRouteAttribute; }
     public boolean isOnCorrectTrack() { return this.onCorrectTrack; }
+    public Train getConnectingTrain() { return this.connectingTrain; }
 }
