@@ -152,7 +152,7 @@ public class Passanger extends Entity {
     }
 
     //Getters, Setters...
-    public int getTravelRoutAttribute() { return this.travelRouteAttribute; }
+    public void setArrivalTrack(int trackNo) { this.arrivalTrack = trackNo; }
     public void setOnCorrectTrack(boolean bool) { this.onCorrectTrack = bool; }
     public void increaseHappiness(int amount) { this.happiness += amount; }
     public void changeArrivalTrack(int trackNo) { this.arrivalTrack = trackNo; }
@@ -163,5 +163,6 @@ public class Passanger extends Entity {
     public int getExpectedTravelTime() { return this.expectedTravelTime;}
     public int getActualTravelTime() { return this.actualTravelTime; }
     public double getTicketPrice() { return this.ticketPrice; }
+    public int getTravelRoutAttribute() { return this.travelRouteAttribute; }
     public boolean isOnCorrectTrack() { return this.onCorrectTrack; }
 }

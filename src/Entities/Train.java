@@ -16,11 +16,13 @@ public class Train extends Entity{
     private Time actualDepartureTime;
     private int expectedArrivalTrack;
     private int actualArrivalTrack;
+    private boolean isCancled = false;
 
     //we may not need this
     private int amountOfPassangers;
     TrainStation station;
 
+    //TODO: Simplify contructor - Perhaps by using the TrainID which links back to RouteData where all of the blanks will be filled in
     public Train(Model owner, String name, boolean showInTrace,  Time arrivalTime, int arrivalTrack, Time expectedDepartureTime) {
         super(owner, name, showInTrace);
         this.station = (TrainStation) owner;
@@ -126,5 +128,16 @@ public class Train extends Entity{
         return addToDepartureTime(new Time(minutes));
     }
 
+    public void addPassangerToTrain(Passanger passanger) {
+        this.passengersOnTrain.add(passanger);
+    }
+
+    public void cancelTrain() {
+        this.isCancled = true;
+    }
+
+    public boolean isTrainCancled() {
+        return this.isCancled;
+    }
 
 }

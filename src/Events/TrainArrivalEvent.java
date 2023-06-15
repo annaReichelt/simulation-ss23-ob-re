@@ -34,6 +34,7 @@ public class TrainArrivalEvent extends Event<Train>{
 
             //Assume: Train is instantiated and every passanger knows where to go
             for (Passanger traveler : train.getPassangersOnTrain()) {
+                traveler.setArrivalTrack(trackNumber);
                 travelType = traveler.getTravelRoutAttribute();
 
                 if (travelType == 0) {
@@ -48,7 +49,7 @@ public class TrainArrivalEvent extends Event<Train>{
                     exitingPassangers.add(traveler);
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
 
-                    //TODO: Ugly, get rid of try/catch
+                    //TODO: get rid of try/catch
                     try {   
                         pTransferEvent.eventRoutine(traveler);
                     } catch (SuspendExecution e) {
@@ -57,37 +58,46 @@ public class TrainArrivalEvent extends Event<Train>{
 
                 } else {
                     //travel type hasnt been set -> error
-                    throw new Error("Travel Type hasn't been set correctly. Needs to be set to 0, 1 or 2");
+                    throw new Error("Travel Type hasn't been set correctly. Needs to be set to 0, 1 or 2 in Passanger.java");
 
                 }
 
-                //TODO: Travel time calculations for late arrivals
+                //TODO: Travel time calculations for late arrivals depending on actual arrival time
             }
 
             //remove passangers from original train
+            //TODO: There is a way to manipulate the hashset while iterating but I cant be assed to look it up right now
             for (Passanger passanger : exitingPassangers) {
                 if (!train.removePassanger(passanger)) {
                     throw new Error("Passanger couldn't be removed from Train");
                 }
             }
 
-
+            //Start train departure event
             TrainDepartureEvent newEvent = new TrainDepartureEvent(model, "Zugausfahrt " + train.getName(), true);
             newEvent.schedule(train, train.addToDepartureTime(model.getDelayTime()).toTimeInstant());
+
         }
         else {
             int newTrackNo = model.getFreeTrackNo();
-            if(newTrackNo== -1) {
+            if(newTrackNo == -1) {
                 // no free track available
                 model.trainQueue.insert(train);
+                //TODO: Added time needs to be recorded
             }
             else {
                 train.setActualArrivalTrack(newTrackNo);
+                informPassangersChangedArrivalTrack(train, newTrackNo);
                 TrainArrivalEvent newEvent = new TrainArrivalEvent(model, getName() + " new Track", true);
                 newEvent.schedule(train, new TimeSpan(0.0)); //for now switching tracks is free
             }
         }
-
     }
-    
+
+    //Informs the passangers already IN the train about the changed track
+    private void informPassangersChangedArrivalTrack(Train train, int newTrack) {
+        for (Passanger traveler : train.getPassangersOnTrain()) {
+            traveler.setArrivalTrack(newTrack);
+        }
+    }
 }
