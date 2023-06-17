@@ -39,28 +39,18 @@ public class TrainArrivalEvent extends Event<Train>{
                 if (travelType == 0) {
                     exitingPassangers.add(traveler);
 
-                } else if (travelType == 1) {
-                    //stays seated, nothing happens
-
                 } else if (travelType == 2) {
                     
                     //train change, passanger exits train
                     exitingPassangers.add(traveler);
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
-
-                    //TODO: get rid of try/catch
-                    try {   
-                        pTransferEvent.eventRoutine(traveler);
-                    } catch (SuspendExecution e) {
-                        e.printStackTrace();
-                    }
+                    pTransferEvent.eventRoutine(traveler);
 
                 } else {
                     //travel type hasnt been set -> error
                     throw new Error("Travel Type hasn't been set correctly. Needs to be set to 0, 1 or 2 in Passanger.java");
 
                 }
-
                 //TODO: Travel time calculations for late arrivals depending on actual arrival time
             }
 

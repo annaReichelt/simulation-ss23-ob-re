@@ -18,8 +18,6 @@ public class Train extends Entity{
     private int actualArrivalTrack;
     private boolean isCancled = false;
 
-    //we may not need this
-    private int amountOfPassangers;
     TrainStation station;
 
     //TODO: Simplify contructor - Perhaps by using the TrainID which links back to RouteData where all of the blanks will be filled in
@@ -34,21 +32,6 @@ public class Train extends Entity{
 
         //We assume that we at least arrive at the expected time
         this.actualArrivalTime = arrivalTime;
-    }
-
-    /**
-     * creates passangers with randomized attributes
-     * @param amount
-     */
-    public void generateRandomizedPassangers(int amount) {
-        //Todo: fill the train with passangers
-    }
-
-    /**
-     * creates passangers with specific attributes
-     */
-    public void generateSpecificPassangers(int amount, int destinationID, int expectedTravelTime, int ticketPrice) {
-        //Todo: fill the train with passangers
     }
 
     public void addSubscriber(Passanger traveler) {

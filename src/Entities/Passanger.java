@@ -10,7 +10,7 @@ import src.RouteData.Time;
 
 public class Passanger extends Entity {
 
-    //100 as base happiness
+    //50 as base happiness
     private int happiness = 50;
     private boolean onCorrectTrack = false;
 
@@ -24,8 +24,10 @@ public class Passanger extends Entity {
     private TrainStation StationModel;
     private Train arrTrain;
     private Train connectingTrain = null;
-    private boolean trainIsCanceled = false; //TODO: Setting this needs to still be implemented in this class
-    private int travelRouteAttribute;   //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train
+    private boolean trainIsCanceled = false;
+
+    //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train
+    private int travelRouteAttribute;   
 
     //Track that the passanger needs to go to, if he changes trains
     public int targetTrack;
@@ -79,8 +81,7 @@ public class Passanger extends Entity {
     private void createDirectTravelRoute(Train train) {
 
         //randomly assign, if the passangers travel stop in salzburg
-        //if not, then they only travel with that particular train onto oblivion
-
+        //if not, then they travel with that particular train to Valhalla
         Random rd = new Random();
         Double rdValue = rd.nextDouble(100);
 
@@ -88,9 +89,8 @@ public class Passanger extends Entity {
             this.destinationName = "Salzburg Hauptbahnhof";
             this.travelRouteAttribute = 0;
         } else {
-            //TODO: Fix later for reliable identification
             //Where exactly does not matter to us
-            this.destinationName = "Beyond";
+            this.destinationName = "Valhalla";
             this.travelRouteAttribute = 1; 
         }
         collectTicketPayment();
@@ -176,4 +176,5 @@ public class Passanger extends Entity {
     public Train getConnectingTrain() { return this.connectingTrain; }
     public void cancelTrain() { this.trainIsCanceled = true; }
     public boolean isTrainCanceled() { return this.trainIsCanceled; }
+
 }

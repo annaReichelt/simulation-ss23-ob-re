@@ -72,7 +72,6 @@ public class EventGenerator extends ExternalEvent{
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
         
         // generate new EventGenerator
-        //TODO: Not a todo but suggestion: Remove this and throw the entire thing into a loop with i = amount of trains in the next 7x 24 hours?
         EventGenerator eg = new EventGenerator(trainStation, "EventGenerator", true);
         eg.schedule(arrivalTime.toTimeInstant());
     }

@@ -19,7 +19,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
 
     //Assume, only travelers who need to change trains go through this routine
     @Override
-    public void eventRoutine(Passanger traveler) throws SuspendExecution {
+    public void eventRoutine(Passanger traveler) {
         
         //Passanger is not on right track
         if (traveler.targetTrack != traveler.getArrivalTrack()) {
@@ -37,7 +37,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
             //Passanger on correct track, but train is not
             if (trainOnTrack == null) {
                 if (futureTrain.isTrainCancled()) {
-                    //TODO: Unhappy, refunds
+                    traveler.cancelTrain();
             
                 } else {
                     traveler.increaseTravelTime((int) Config.MIN_TRANSFERE.getValue());
