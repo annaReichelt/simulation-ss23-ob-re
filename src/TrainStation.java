@@ -75,7 +75,7 @@ public class TrainStation extends Model{
     }
 
     //Getters, Setters...
-    public void addLosses(double amount) { this.lossesFromRefunds += amount; }
+    public void addLossesFromRefunds(double amount) { this.lossesFromRefunds += amount; }
     public void addRevenue(double price) { this.revenewFromTicketSales += price; }
     public String getStationName() { return this.stationName; }
     public int getdelayOfAllTrains() { return this.delayOfAllTrains; }
@@ -148,7 +148,7 @@ public class TrainStation extends Model{
         trainStationExperiment.start();
 
         trainStationExperiment.report();
-        
+
         trainStationExperiment.finish();
         System.out.println(trainStationModel.totalTrains);
     }
