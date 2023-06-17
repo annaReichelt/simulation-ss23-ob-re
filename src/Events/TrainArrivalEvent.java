@@ -27,7 +27,6 @@ public class TrainArrivalEvent extends Event<Train>{
         if(model.isTrackAvailable(trackNumber)) {
             model.getTrackNo(trackNumber).setFree(false);
 
-
             //Passanger Stuff
             HashSet<Passanger> exitingPassangers = new HashSet<Passanger>();
             int travelType;

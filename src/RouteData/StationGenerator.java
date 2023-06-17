@@ -17,6 +17,7 @@ public class StationGenerator {
         data = routeData.getStationsServed();
         mainStation = name;
     }
+    
     public static StationGenerator getInstance() {
         if (instance == null) {
             instance = new StationGenerator("Salzburg Hauptbahnhof");

@@ -69,7 +69,6 @@ public class Train extends Entity{
     }
 
     //gettters, setters...
-
     public HashSet<Passanger> getPassangersOnTrain() {
         return this.passengersOnTrain;
     }
@@ -139,5 +138,4 @@ public class Train extends Entity{
     public boolean isTrainCancled() {
         return this.isCancled;
     }
-
 }

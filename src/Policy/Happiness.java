@@ -4,15 +4,12 @@ package src.Policy;
 
 public enum Happiness {
 
-     MINOR(10), 
-     SEMIMINOR(20), 
-     MID(30), 
-     SEMIMAJOR(40), 
-     MAJOR(50);
+     SMALL_MALUS(10), 
+     NORMAL_MALUS(25), 
+     LARGE_MALUS(50),
+     CANCELED_MALUS(100);
 
-     private int value;
-     private Happiness(int value) { this.value = value; }
-     private int getValue() { return this.value; }
-     public void setValue(int value) {this.value = value; }
-
+     private final int value;
+     Happiness(int value) { this.value = value; }
+     public int getValue() { return this.value; }
 }

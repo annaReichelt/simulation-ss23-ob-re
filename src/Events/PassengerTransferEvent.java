@@ -29,28 +29,29 @@ public class PassengerTransferEvent extends Event<Passanger>{
             traveler.setArrivalTrack(traveler.targetTrack);
             //TODO: Check if time is correct here
             traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + Config.MIN_TRANSFERE.getValue(), TimeUnit.MINUTES));
-        }
+        
+        } else {
+            Train trainOnTrack = model.getTrackNo(traveler.getActualTravelTime()).getTrainOnTrack();
+            Train futureTrain = traveler.getConnectingTrain();
 
-        Train trainOnTrack = model.getTrackNo(traveler.getActualTravelTime()).getTrainOnTrack();
-        Train futureTrain = traveler.getConnectingTrain();
-
-        //Passanger on correct track, but train is not
-        if (trainOnTrack == null) {
+            //Passanger on correct track, but train is not
+            if (trainOnTrack == null) {
+                if (futureTrain.isTrainCancled()) {
+                    //TODO: Unhappy, refunds
             
-            if (futureTrain.isTrainCancled()) {
-                //TODO: Unhappy, refunds
-            
-            } else {
-                traveler.increaseTravelTime((int) Config.MIN_TRANSFERE.getValue());
-                traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + Config.MIN_TRANSFERE.getValue(), TimeUnit.MINUTES));
+                } else {
+                    traveler.increaseTravelTime((int) Config.MIN_TRANSFERE.getValue());
+                    traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + Config.MIN_TRANSFERE.getValue(), TimeUnit.MINUTES));
+                }
             }
-        }
 
-        //Passanger on correct track, Train on correct track
-        if (trainOnTrack == futureTrain) {
+            //Passanger on correct track, Train on correct track
+            if (trainOnTrack == futureTrain) {
 
-            //further time delays that come from the train will be added through the train itself
-            futureTrain.addPassangerToTrain(traveler);
+                //further time delays that come from the train will be added through the train itself
+                futureTrain.addPassangerToTrain(traveler);
+            }
         }
     }
 }
+

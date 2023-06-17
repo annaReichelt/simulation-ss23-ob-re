@@ -5,12 +5,13 @@ import java.util.Random;
 import desmoj.core.simulator.*;
 import src.Config;
 import src.TrainStation;
+import src.Policy.CustomerService;
 import src.RouteData.Time;
 
 public class Passanger extends Entity {
 
     //100 as base happiness
-    private int happiness = 100;
+    private int happiness = 50;
     private boolean onCorrectTrack = false;
 
     private int arrivalTrack;
@@ -23,6 +24,7 @@ public class Passanger extends Entity {
     private TrainStation StationModel;
     private Train arrTrain;
     private Train connectingTrain = null;
+    private boolean trainIsCanceled = false; //TODO: Setting this needs to still be implemented in this class
     private int travelRouteAttribute;   //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train
 
     //Track that the passanger needs to go to, if he changes trains
@@ -31,6 +33,7 @@ public class Passanger extends Entity {
     public Passanger(Model owner, String name, boolean showInTrace) {
         super(owner, name, showInTrace);
         this.StationModel = (TrainStation) owner;
+        CustomerService.GetInstance().addTraveler(this);
     }
 
 
@@ -151,10 +154,15 @@ public class Passanger extends Entity {
         this.targetTrack = trackNo;
     }
 
+    public int getTravelDelay() {
+        return this.actualTravelTime - this.expectedTravelTime;
+    }
+
     //Getters, Setters...
     public void setArrivalTrack(int trackNo) { this.arrivalTrack = trackNo; }
     public void setOnCorrectTrack(boolean bool) { this.onCorrectTrack = bool; }
     public void increaseHappiness(int amount) { this.happiness += amount; }
+    public void decreaseHappiness(int amount) { this.happiness -= amount; }
     public void changeArrivalTrack(int trackNo) { this.arrivalTrack = trackNo; }
     public void increaseTravelTime(int time) { this.actualTravelTime += time; }
     public int getHappiness() { return this.happiness;}
@@ -166,4 +174,6 @@ public class Passanger extends Entity {
     public int getTravelRoutAttribute() { return this.travelRouteAttribute; }
     public boolean isOnCorrectTrack() { return this.onCorrectTrack; }
     public Train getConnectingTrain() { return this.connectingTrain; }
+    public void cancelTrain() { this.trainIsCanceled = true; }
+    public boolean isTrainCanceled() { return this.trainIsCanceled; }
 }

@@ -148,7 +148,7 @@ public class TrainStation extends Model{
         trainStationExperiment.start();
 
         trainStationExperiment.report();
-
+        
         trainStationExperiment.finish();
         System.out.println(trainStationModel.totalTrains);
     }
