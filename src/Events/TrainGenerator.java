@@ -55,6 +55,9 @@ public class TrainGenerator extends ExternalEvent{
                 if(localDepartureTime.compareTo(new Time(7 * 24, 0, 0)) >= 0) {
                     localDepartureTime = localDepartureTime.add(new Time(-7 * 24, 0, 0));
                 }
+                if(sd.getAddInfo() != 1) {
+                    // TODO: add passangers
+                }
                 generateTrainArrivalEvent(sd, localArrivalTime, localDepartureTime);
             }
         }
