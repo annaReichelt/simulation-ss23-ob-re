@@ -29,6 +29,10 @@ public class StationGenerator {
         return mainStation;
     }
 
+    public boolean isDataEmpty(){
+        return data.isEmpty();
+    }
+
     public StationData getNextStationData(){
         if(data.isEmpty()){
             System.out.println("Route is empty, starting again");

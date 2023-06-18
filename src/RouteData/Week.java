@@ -84,7 +84,7 @@ public class Week {
             default:
                 return false;
         }
-    } 
+    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();

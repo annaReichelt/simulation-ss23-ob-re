@@ -101,7 +101,7 @@ public class TrainStation extends Model{
     }
 
     public void doInitialSchedules() {
-        EventGenerator eg = new EventGenerator(this, "EventGenerator", true);
+        TrainGenerator eg = new TrainGenerator(this, "EventGenerator", true);
         eg.schedule(new TimeInstant(0.0));
     }
 
