@@ -45,7 +45,7 @@ public class TrainStation extends Model{
         this.trainTracks = new Track[amountOfTracks];
         ArrayList<Integer> trackIDs = sg.getTrackIDs();
         for (int i = 0; i < trainTracks.length; i++) {
-            trainTracks[i] = new Track(this, "Track " + trackIDs.get(i), true, i+1);
+            trainTracks[i] = new Track(this, "Track " + trackIDs.get(i), true, trackIDs.get(i));
         }
     }
 
