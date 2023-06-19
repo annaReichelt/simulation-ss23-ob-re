@@ -24,13 +24,31 @@ public class TrainGenerator extends ExternalEvent{
 
     private void generateTrainArrivalEvent(StationData sd, Time arrivalTime, Time departureTime) {
         Train train = new Train(trainStation, sd.getTripID(), true, arrivalTime, sd.getTrackNumber(), departureTime);
+
+
         int addInfo = sd.getAddInfo();
-        if (addInfo != 1) {
+        if (addInfo != 1) {  
+            for (int i = 0; i < 10; i++) {
+                createPassanger("Passanger #" + i, train);
+            }
+            for (int i = 0; i < 10; i++) {
+                Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
+                createPassanger("Passanger #" + i, train);
+            }
             //TODO: add passangers
+            for (int i = 0; i < 10; i++) {
+                Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
+                createPassanger("Passanger #" + i, train);
+            }
+            for (int i = 0; i < 10; i++) {
+                Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
+                createPassanger("Passanger #" + i, train);
+            }
         }
 
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
+        trainStation.trainsToCome.add(train);
     }
     
     /* Generate the next valid StationData and generate the TrainArrivalEvent
@@ -56,7 +74,7 @@ public class TrainGenerator extends ExternalEvent{
                     localDepartureTime = localDepartureTime.add(new Time(-7 * 24, 0, 0));
                 }
                 if(sd.getAddInfo() != 1) {
-                    // TODO: add passangers
+                    //TODO
                 }
                 generateTrainArrivalEvent(sd, localArrivalTime, localDepartureTime);
             }
@@ -71,6 +89,7 @@ public class TrainGenerator extends ExternalEvent{
      */
     private Passanger createPassanger(String name, Train train) {
         Passanger passanger = new Passanger(trainStation, name, true);
+        train.addPassangerToTrain(passanger);
         passanger.createTravelRoute(train);
 
         return passanger;

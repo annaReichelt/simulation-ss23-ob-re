@@ -8,7 +8,7 @@ import src.RouteData.*;
 
 public class Train extends Entity{
     
-    private HashSet<Passanger> passengersOnTrain;
+    private HashSet<Passanger> passengersOnTrain = new HashSet<Passanger>();
     private ArrayList<Passanger> futureTravelers = new ArrayList<Passanger>();
     private Time expectedArrivalTime;
     private Time actualArrivalTime;

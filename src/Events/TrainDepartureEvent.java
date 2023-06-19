@@ -26,6 +26,7 @@ public class TrainDepartureEvent extends Event<Train>{
             nextTrain.setActualArrivalTrack(train.getActualArrivalTrack());
             TrainArrivalEvent newEvent = new TrainArrivalEvent(model, "Zugeinfahrt nach Warten " + nextTrain.getName(), true);
             newEvent.schedule(nextTrain, new TimeSpan(5.0)); //5 minutes for switching tracks
+            model.trainsToCome.remove(train);
         }
         
     }

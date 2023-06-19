@@ -26,6 +26,7 @@ public class TrainArrivalEvent extends Event<Train>{
         int trackNumber = train.getActualArrivalTrack();
         if(model.isTrackAvailable(trackNumber)) {
             model.getTrackNo(trackNumber).setFree(false);
+            model.getTrackNo(trackNumber).setTrainOnTrack(train);
 
             //Passanger Stuff
             HashSet<Passanger> exitingPassangers = new HashSet<Passanger>();
@@ -40,11 +41,12 @@ public class TrainArrivalEvent extends Event<Train>{
                     exitingPassangers.add(traveler);
 
                 } else if (travelType == 2) {
-                    
                     //train change, passanger exits train
                     exitingPassangers.add(traveler);
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
                     pTransferEvent.eventRoutine(traveler);
+                
+                } else if (travelType == 1) {
 
                 } else {
                     //travel type hasnt been set -> error

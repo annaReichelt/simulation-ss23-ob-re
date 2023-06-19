@@ -25,23 +25,21 @@ public class PassengerTransferEvent extends Event<Passanger>{
         if (traveler.targetTrack != traveler.getArrivalTrack()) {
             //TODO: Double check if you made an oopsie with the track indexing
             
-
             traveler.setArrivalTrack(traveler.targetTrack);
             //TODO: Check if time is correct here
-            traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + Config.MIN_TRANSFERE.getValue(), TimeUnit.MINUTES));
+            traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + 4, TimeUnit.MINUTES));
         
         } else {
-            Train trainOnTrack = model.getTrackNo(traveler.getActualTravelTime()).getTrainOnTrack();
+            Train trainOnTrack = model.getTrackNo(traveler.getArrivalTrack() + 1).getTrainOnTrack();  //TODO: get train on track that pass stands on right now
             Train futureTrain = traveler.getConnectingTrain();
 
             //Passanger on correct track, but train is not
-            if (trainOnTrack == null) {
+            if (trainOnTrack == null) { 
                 if (futureTrain.isTrainCancled()) {
                     traveler.cancelTrain();
-            
                 } else {
-                    traveler.increaseTravelTime((int) Config.MIN_TRANSFERE.getValue());
-                    traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + Config.MIN_TRANSFERE.getValue(), TimeUnit.MINUTES));
+                    traveler.increaseTravelTime(1);
+                    traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + 1, TimeUnit.MINUTES));
                 }
             }
 
@@ -50,6 +48,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
 
                 //further time delays that come from the train will be added through the train itself
                 futureTrain.addPassangerToTrain(traveler);
+                System.out.println("Passangere transferred successfully");
             }
         }
     }

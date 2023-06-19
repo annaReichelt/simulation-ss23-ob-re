@@ -1,5 +1,6 @@
 package src;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.simulator.*;
@@ -9,14 +10,15 @@ import src.Events.*;
 
 public class TrainStation extends Model{
 
-    private double revenewFromTicketSales = 0;
-    private double lossesFromRefunds = 0;
+    private static double revenewFromTicketSales = 0;
+    private static double lossesFromRefunds = 0;
     private int delayOfAllTrains = 0;
     private String stationName;
     private StationGenerator sg;
     public int totalTrains = 0;
 
     private Track[] trainTracks;
+    public HashSet<Train> trainsToCome;
 
     /*public TrainStation(Model owner, String name, boolean showInReport, 
             boolean showIntrace, String stationName, int amountOfTracks) {
@@ -75,12 +77,12 @@ public class TrainStation extends Model{
     }
 
     //Getters, Setters...
-    public void addLossesFromRefunds(double amount) { this.lossesFromRefunds += amount; }
-    public void addRevenue(double price) { this.revenewFromTicketSales += price; }
+    public void addLossesFromRefunds(double amount) { lossesFromRefunds += amount; }
+    public void addRevenue(double price) { revenewFromTicketSales += price; }
     public String getStationName() { return this.stationName; }
     public int getdelayOfAllTrains() { return this.delayOfAllTrains; }
-    public double getRevenue() { return this.revenewFromTicketSales; }
-    public double getProfit() { return this.revenewFromTicketSales - this.lossesFromRefunds; }
+    public static double getRevenue() { return revenewFromTicketSales; }
+    public static double getProfit() { return revenewFromTicketSales - lossesFromRefunds; }
 
 
 
@@ -113,6 +115,8 @@ public class TrainStation extends Model{
     	// Par 3: show in report?
     	// Par 4: show in trace?
         trainQueue = new Queue<Train>(this, "TrainQueue", true, true);
+
+        trainsToCome = new HashSet<Train>();
 
         // delayTime init
         // Par 1: Modellzugehoerigkeit
@@ -150,6 +154,10 @@ public class TrainStation extends Model{
         trainStationExperiment.report();
 
         trainStationExperiment.finish();
+        
         System.out.println(trainStationModel.totalTrains);
+        System.out.println("Revenue: " + getRevenue());
+        System.out.println("Losses: " + getRevenue());
+        System.out.println("Profit: " + getProfit());
     }
 }

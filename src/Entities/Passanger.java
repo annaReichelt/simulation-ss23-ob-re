@@ -83,7 +83,7 @@ public class Passanger extends Entity {
         //randomly assign, if the passangers travel stop in salzburg
         //if not, then they travel with that particular train to Valhalla
         Random rd = new Random();
-        Double rdValue = rd.nextDouble(100);
+        Double rdValue = (double) rd.nextInt(100);
 
         if (rdValue <= 50) {
             this.destinationName = "Salzburg Hauptbahnhof";
@@ -98,8 +98,9 @@ public class Passanger extends Entity {
 
     private void collectTicketPayment() {
         Random rd = new Random();
-        Double rdPrice = rd.nextDouble(15.00, 120.00);
+        Double rdPrice = (double) rd.nextInt(120);
         this.ticketPrice = rdPrice;
+        System.out.println("Ticketprice: " + rdPrice);
 
         StationModel.addRevenue(rdPrice);
     }
@@ -114,31 +115,31 @@ public class Passanger extends Entity {
      */
     private void createRouteWithTrainChange(Train train) {
 
-        Time arrivalTime = train.getExpectedArrivalTime();
+        Time arrivalTime = train.getExpectedArrivalTime();  
         Time difference;
         Time otherArrivalTime;
 
-        //Security for the first instanciated train of the sim
-        if (StationModel.trainQueue.isEmpty()) {
-            createDirectTravelRoute(train);
-        }
 
-        for (Train connectingTrain : StationModel.trainQueue) {
+        for (Train connectingTrain : StationModel.trainsToCome) {
             otherArrivalTime = connectingTrain.getExpectedArrivalTime();
 
             if (arrivalTime.compareTo(otherArrivalTime) == -1) {
                 difference = arrivalTime.difference(otherArrivalTime);
                 
-                //difference needs to be larger than 10 minutes and smaller than 59 minutes (for simplicity to avoid dealing with 1h) 
-                if (difference.hour == 0 && difference.minute > Config.MIN_CHANGE_TIME.getValue()) {
-
-                    //this is the connecting train for this passanger
+                //this is the connecting train for this passanger
                     this.connectingTrain = connectingTrain;
                     this.travelRouteAttribute = 2;
                     subscribeToConnectingTrain(connectingTrain);
                     collectTicketPayment();
                     return;
-                }
+
+
+                    //TODO: Time logic sucks
+                //difference needs to be larger than 10 minutes and smaller than 59 minutes (for simplicity to avoid dealing with 1h) 
+           //      if (difference.hour == 0 && difference.minute < 59) {
+
+                    
+            //    } 
             }
         }
 
