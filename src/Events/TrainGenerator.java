@@ -4,11 +4,16 @@ import desmoj.core.simulator.*;
 import src.RouteData.*;
 import src.*;
 import src.Entities.*;
+import java.util.*;
 
 public class TrainGenerator extends ExternalEvent{
     
     private TrainStation trainStation;
     private StationGenerator sg;
+    private HashMap<Time, Train> trainListNotGeneratePassangers;
+    private HashMap<Time, Train> trainListGeneratePassangers;
+    private TreeMap<Time, Train> trainListPickUpPassangers;
+
 
     public TrainGenerator(Model owner, String name, boolean showInTrace) {
         super(owner, name, showInTrace);
@@ -18,44 +23,47 @@ public class TrainGenerator extends ExternalEvent{
 
     public void eventRoutine() {
         while(!sg.isDataEmpty()){
-            generateTrain();
-        } 
+            generateTrainList();
+        }
+        for(Train train : trainListGeneratePassangers.values()) {
+            generateTrainArrivalEventWithPassangers(train);
+        }
+        for(Train train : trainListNotGeneratePassangers.values()) {
+            generateTrainArrivalEvent(train);
+        }
     }
 
-    private void generateTrainArrivalEvent(StationData sd, Time arrivalTime, Time departureTime) {
-        Train train = new Train(trainStation, sd.getTripID(), true, arrivalTime, sd.getTrackNumber(), departureTime);
+    private void generateTrainArrivalEventWithPassangers(Train train) {
 
-
-        int addInfo = sd.getAddInfo();
-        if (addInfo != 1) {  
-            for (int i = 0; i < 10; i++) {
-                createPassanger("Passanger #" + i, train);
-            }
-            for (int i = 0; i < 10; i++) {
-                Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
-                createPassanger("Passanger #" + i, train);
-            }
-            //TODO: add passangers
-            for (int i = 0; i < 10; i++) {
-                Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
-                createPassanger("Passanger #" + i, train);
-            }
-            for (int i = 0; i < 10; i++) {
-                Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
-                createPassanger("Passanger #" + i, train);
-            }
+        for (int i = 0; i < 10; i++) {
+            createPassanger("Passanger #" + i, train);
+        }
+        for (int i = 0; i < 10; i++) {
+            Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
+            createPassanger("Passanger #" + i, train);
+        }
+        //TODO: add passangers
+        for (int i = 0; i < 10; i++) {
+            Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
+            createPassanger("Passanger #" + i, train);
+        }
+        for (int i = 0; i < 10; i++) {
+            Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
+            createPassanger("Passanger #" + i, train);
         }
 
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
         trainStation.trainsToCome.add(train);
+    }    
+
+    private void generateTrainArrivalEvent(Train train) {
+        TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
+        tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
+        trainStation.trainsToCome.add(train);
     }
-    
-    /* Generate the next valid StationData and generate the TrainArrivalEvent
-     * @param shouldRunEmpty: if true, the method will not run over the last StationData, if false, it will restart the StationData
-     * @return -1 if no StationData is left, 0 if the day is not finished, 1 if the day is finished, 2 if the StationData is unexpectedly empty
-    */
-    private void generateTrain() {
+
+    private void generateTrainList() {
         StationData sd = sg.getNextStationData();
         trainStation.totalTrains ++;
         Time arrivalTime = sd.getArrivalTime();
@@ -73,12 +81,27 @@ public class TrainGenerator extends ExternalEvent{
                 if(localDepartureTime.compareTo(new Time(7 * 24, 0, 0)) >= 0) {
                     localDepartureTime = localDepartureTime.add(new Time(-7 * 24, 0, 0));
                 }
-                if(sd.getAddInfo() != 1) {
-                    //TODO
+                Train localTrain = generateTrain(sd, localArrivalTime, localDepartureTime);
+                switch (sd.getAddInfo()) { // 0 = no info, 1 = startingStation, 2 = endingStation
+                    case 1:
+                        trainListPickUpPassangers.put(localArrivalTime, localTrain);
+                        trainListNotGeneratePassangers.put(localArrivalTime, localTrain);
+                        break;
+                    case 2:
+                        trainListGeneratePassangers.put(localArrivalTime, localTrain);
+                        break;
+                    default:
+                        trainListPickUpPassangers.put(localArrivalTime, localTrain);
+                        trainListGeneratePassangers.put(localArrivalTime, localTrain);
+                        break;
                 }
-                generateTrainArrivalEvent(sd, localArrivalTime, localDepartureTime);
             }
         }
+    }
+
+    private Train generateTrain(StationData sd, Time arrivalTime, Time departureTime) {
+        Train train = new Train(trainStation, sd.getTripID(), true, arrivalTime, sd.getTrackNumber(), departureTime);
+        return train;
     }
 
     /**
