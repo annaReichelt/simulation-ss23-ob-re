@@ -104,6 +104,16 @@ public class TrainGenerator extends ExternalEvent{
         return train;
     }
 
+    private ArrayList<Train> getNextTrains(Time from, Time to) {
+        ArrayList<Train> trains = new ArrayList<Train>();
+        for(Time time : trainListPickUpPassangers.keySet()) {
+            if(time.compareTo(from) >= 0 && time.compareTo(to) <= 0) {
+                trains.add(trainListPickUpPassangers.get(time));
+            }
+        }
+        return trains;
+    }
+
     /**
      * Creates passangers for a train. The remaining data for the class vars is then pulled from RouteData
      * @param name of the Passanger
@@ -117,4 +127,5 @@ public class TrainGenerator extends ExternalEvent{
 
         return passanger;
     }
+
 }
