@@ -55,9 +55,11 @@ public class TrainStation extends Model{
      * @return track with specified number (ID) iff it exists.
      */
     public Track getTrackNo(int number) {
-        number--;
-        if (number >= trainTracks.length) return null; //TODO: Throw good error/log
-        return this.trainTracks[number];
+        for (Track track : trainTracks) {
+            if (track.getTrackNo() == number)
+                return track;
+        }
+        return null;
     }
 
     public boolean isTrackAvailable(int trackNo) {
