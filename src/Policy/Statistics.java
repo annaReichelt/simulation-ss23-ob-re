@@ -8,6 +8,8 @@ public class Statistics {
     int directRoutes = 0;
     int endingInSalzburgRoutes = 0;
     int routesWithTrainChange = 0;
+    int missedTrains = 0; 
+
     private static Statistics stats = null;
 
     private Statistics() { }
@@ -45,6 +47,7 @@ public class Statistics {
         System.out.println("Direct Travel Routes: " + this.directRoutes);
         System.out.println("Routes ending in Salzburg: " + this.endingInSalzburgRoutes);
         System.out.println("Routes with Train Change: " + this.routesWithTrainChange);
+        System.out.println("Missed Trains: " + this.missedTrains);
     }
 
 }
