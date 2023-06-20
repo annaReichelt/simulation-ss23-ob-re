@@ -4,9 +4,11 @@ import java.util.HashSet;
 
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.simulator.*;
+import desmoj.extensions.visualization2d.engine.model.Statistic;
 import src.Entities.*;
 import src.RouteData.*;
 import src.Events.*;
+import src.Policy.Statistics;
 
 public class TrainStation extends Model{
 
@@ -182,5 +184,6 @@ public class TrainStation extends Model{
         System.out.println("Revenue: " + getRevenue());
         System.out.println("Losses: " + getRevenue());
         System.out.println("Profit: " + getProfit());
+        Statistics.getInstance().printStats();
     }
 }

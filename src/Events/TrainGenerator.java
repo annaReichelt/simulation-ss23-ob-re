@@ -4,6 +4,8 @@ import desmoj.core.simulator.*;
 import src.RouteData.*;
 import src.*;
 import src.Entities.*;
+import src.Policy.Statistics;
+
 import java.util.*;
 
 public class TrainGenerator extends ExternalEvent{
@@ -43,6 +45,11 @@ public class TrainGenerator extends ExternalEvent{
     }    
 
     private void generateTrainArrivalEvent(Train train) {
+
+        for (int i = 0; i < 10; i++) {
+            createPassanger("Passanger #" + i, train);
+        }
+
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
         trainStation.trainsToCome.add(train);
@@ -52,15 +59,15 @@ public class TrainGenerator extends ExternalEvent{
         trainListNotGeneratePassangers = new HashMap<>();
         trainListGeneratePassangers = new HashMap<>();
         trainListPickUpPassangers = new TreeMap<>();
-        while(!sg.isDataEmpty()){
+        while(!sg.isDataEmpty()){ 
             StationData sd = sg.getNextStationData();
             trainStation.totalTrains ++;
             Time arrivalTime = sd.getArrivalTime();
             Time departureTime = sd.getDepartureTime();
             Week schedule = sd.getWeek();
             int day;
-            for(day = 0; day < 7; day++) {
-                if(schedule.isActive(day)) {
+            for(day = 0; day < 7; day++) { 
+                if(schedule.isActive(day)) { 
                     Time localArrivalTime = arrivalTime.add(new Time(day * 24, 0, 0));
                     Time localDepartureTime = departureTime.add(new Time(day * 24, 0, 0));
                     //wrap around after 1 week
@@ -71,16 +78,17 @@ public class TrainGenerator extends ExternalEvent{
                         localDepartureTime = localDepartureTime.add(new Time(-7 * 24, 0, 0));
                     }
                     Train localTrain = generateTrain(sd, localArrivalTime, localDepartureTime);
+                    Statistics.getInstance().incrementTrains();
                     switch (sd.getAddInfo()) { // 0 = no info, 1 = startingStation, 2 = endingStation
                         case 1:
-                            trainListPickUpPassangers.put(localArrivalTime, localTrain);
+                            trainListPickUpPassangers.put(localArrivalTime, localTrain); System.out.println("c1 ");
                             trainListNotGeneratePassangers.put(localArrivalTime, localTrain);
                             break;
                         case 2:
-                            trainListGeneratePassangers.put(localArrivalTime, localTrain);
+                            trainListGeneratePassangers.put(localArrivalTime, localTrain);System.out.println("C2 ");
                             break;
                         default:
-                            trainListPickUpPassangers.put(localArrivalTime, localTrain);
+                            trainListPickUpPassangers.put(localArrivalTime, localTrain);System.out.println("def ");
                             trainListGeneratePassangers.put(localArrivalTime, localTrain);
                             break;
                     }
@@ -112,6 +120,7 @@ public class TrainGenerator extends ExternalEvent{
      */
     private Passanger createPassanger(String name, Train train) {
         Passanger passanger = new Passanger(trainStation, name, true);
+        Statistics.getInstance().incrementPassanger();
         train.addPassangerToTrain(passanger);
         passanger.createTravelRoute(train, getNextTrains(train.getExpectedArrivalTime().add(new Time(15)), train.getExpectedArrivalTime().add(new Time(50))));
 

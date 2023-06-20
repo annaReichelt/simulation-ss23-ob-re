@@ -7,6 +7,7 @@ import desmoj.core.simulator.*;
 import src.Config;
 import src.TrainStation;
 import src.Policy.CustomerService;
+import src.Policy.Statistics;
 import src.RouteData.Time;
 
 public class Passanger extends Entity {
@@ -73,10 +74,12 @@ public class Passanger extends Entity {
         if (rdValue <= 50) {
             this.destinationName = "Salzburg Hauptbahnhof";
             this.travelRouteAttribute = 0;
+            Statistics.getInstance().incrementRoutesEndingInSalzburg();
         } else {
             //Where exactly does not matter to us
             this.destinationName = "Valhalla";
             this.travelRouteAttribute = 1; 
+            Statistics.getInstance().incrementDirectTravelRoutes();
         }
         collectTicketPayment();
     }
@@ -105,7 +108,7 @@ public class Passanger extends Entity {
 
         this.connectingTrain = potentialConnections.get(0);
         this.travelRouteAttribute = 2;
-        System.out.println("Created route with train change");
+        Statistics.getInstance().incementRoutesWithTrainChange();
         subscribeToConnectingTrain(connectingTrain);
         collectTicketPayment();
     }
