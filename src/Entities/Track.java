@@ -1,6 +1,7 @@
 package src.Entities;
 
 import desmoj.core.simulator.*;
+import src.Config;
 
 public class Track extends Entity {
 
@@ -9,7 +10,7 @@ public class Track extends Entity {
     private Train trainOnThisTrack = null;
 
     public Track(Model owner, String name, boolean showInTrace, int trackNumber) {
-        super(owner, name, showInTrace);
+        super(owner, name, Config.TRACE_TRACKS.getBool());
         this.trackNumber = trackNumber;
     }
 

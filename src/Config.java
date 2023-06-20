@@ -6,6 +6,9 @@ public enum Config {
     NUM_TRACKS(6),
     MIN_TRANSFERE(5),
     TRAIN_TRACK_CHANGE_TIME(0),
+    TRACE_PASSANGERS(0), //0 = false, 1 == true
+    TRACE_TRAINS(0),
+    TRACE_TRACKS(0),
     MIN_CHANGE_TIME(10); //between 10 - 59 minutes
 
 
@@ -13,4 +16,8 @@ public enum Config {
     private final int value;
     Config(int value) { this.value = value; }
     public int getValue() { return value; }
+    public boolean getBool() {
+        if (value == 0) { return false; }
+        else { return true;}
+    }
 }
