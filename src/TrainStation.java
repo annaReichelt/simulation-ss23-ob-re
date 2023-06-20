@@ -1,6 +1,8 @@
 package src;
 import java.util.*;
 
+import org.hamcrest.CustomMatcher;
+
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.simulator.*;
 //import desmoj.extensions.visualization2d.engine.model.Statistic;
@@ -8,6 +10,7 @@ import desmoj.core.simulator.Queue;
 import src.Entities.*;
 import src.RouteData.*;
 import src.Events.*;
+import src.Policy.CustomerService;
 import src.Policy.Statistics;
 
 public class TrainStation extends Model{
@@ -147,6 +150,8 @@ public class TrainStation extends Model{
 
         TrainStation trainStationModel = new TrainStation(null, "TrainStation", true, true);
         Logger.getInstance().addModel(trainStationModel);
+
+        CustomerService.GetInstance().addModelReference(trainStationModel);
 
         trainStationModel.connectToExperiment(trainStationExperiment);
 

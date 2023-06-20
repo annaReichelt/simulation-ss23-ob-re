@@ -88,10 +88,20 @@ public class TrainArrivalEvent extends Event<Train>{
                 train.announceTrackChange();
                 TrainArrivalEvent newEvent = new TrainArrivalEvent(model, getName() + " new Track", true);
 
-                //TODO: Time penalty for track change
-                newEvent.schedule(train, new TimeSpan(0.0)); //for now switching tracks is free
+                Double timePenalty = 3.0;
+                
+                for (Passanger pass : train.getPassangersOnTrain()) {
+                    pass.actualTravelTime += timePenalty;
+                }
+
+                newEvent.schedule(train, new TimeSpan(timePenalty)); //for now switching tracks is free
             }
         }
+    
+        for (Passanger pass : train.futureTravelers) {
+            pass.departureTime = train.getActualDepartureTime().toMinutes();
+        }
+    
     }
 
     //Informs the passangers already IN the train about the changed track

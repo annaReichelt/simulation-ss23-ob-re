@@ -19,9 +19,11 @@ public class Passanger extends Entity {
     private int arrivalTrack;
 
     private String destinationName;
-    private int expectedTravelTime;
-    private int actualTravelTime;
-    private double ticketPrice;
+    public int expectedArrivalTime;
+    public int actualTravelTime;
+    public double ticketPrice;
+
+    public int departureTime; //500
 
     private TrainStation StationModel;
     public Train connectingTrain = null;
@@ -124,7 +126,7 @@ public class Passanger extends Entity {
     }
 
     public int getTravelDelay() {
-        return this.actualTravelTime - this.expectedTravelTime;
+        return this.actualTravelTime - this.departureTime;
     }
 
     //Getters, Setters...
@@ -137,7 +139,7 @@ public class Passanger extends Entity {
     public int getHappiness() { return this.happiness;}
     public int getArrivalTrack() { return this.arrivalTrack; }
     public String getDestinationID() { return this.destinationName; }
-    public int getExpectedTravelTime() { return this.expectedTravelTime;}
+    public int getExpectedArrivalTime() { return this.expectedArrivalTime;}
     public int getActualTravelTime() { return this.actualTravelTime; }
     public double getTicketPrice() { return this.ticketPrice; }
     public int getTravelRoutAttribute() { return this.travelRouteAttribute; }

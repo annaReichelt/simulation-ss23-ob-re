@@ -8,6 +8,7 @@ import src.Config;
 import src.Logger;
 import src.TrainStation;
 import src.Entities.*;
+import src.Policy.Statistics;
 
 public class PassengerTransferEvent extends Event<Passanger>{
 
@@ -35,6 +36,8 @@ public class PassengerTransferEvent extends Event<Passanger>{
             Logger.getInstance().log("Passanger " + traveler.getName() + " needs to change track from  " + traveler.getArrivalTrack() + " to " + traveler.targetTrack);
             traveler.setArrivalTrack(traveler.targetTrack);
             PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to change tracks", isCurrent());
+
+            traveler.actualTravelTime += 4;
             pte.schedule(traveler, new TimeSpan(4.0));
 
         } else {
@@ -56,6 +59,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
                     //TODO: Travel time increase
                     Logger.getInstance().log("Passanger " + traveler.getName() + " on correct track " + traveler.getArrivalTrack() + " but train isnt.");
                     traveler.setArrivalTrack(traveler.connectingTrain.getActualArrivalTrack());
+                    traveler.actualTravelTime += 1;
                     PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to wait", isCurrent());
                     pte.schedule(traveler, new TimeSpan(1.0));
                 }
@@ -67,7 +71,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
                 //further time delays that come from the train will be added through the train itself
                 futureTrain.addPassangerToTrain(traveler);
                 Logger.getInstance().log("Passanger " + traveler.getName() + " transferred successfully.");
-                System.out.println("Passanger transferred successfully");
+                
             }
         }
     }

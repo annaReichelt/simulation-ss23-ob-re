@@ -54,7 +54,7 @@ public class CustomerService {
             ticketPrice = p.getTicketPrice();
 
             //apply happyness rules and refunds
-            if (p.isTrainCanceled()) {
+            if (p.isTrainMissed()) {
                 p.decreaseHappiness(Happiness.CANCELED_MALUS.getValue());
                 this.model.addLossesFromRefunds(Refund.CANCELED_REFUND.getValue() * ticketPrice);
             } else if (travelDelay <= 15) {
