@@ -38,19 +38,6 @@ public class TrainGenerator extends ExternalEvent{
         for (int i = 0; i < 10; i++) {
             createPassanger("Passanger #" + i, train);
         }
-        for (int i = 0; i < 10; i++) {
-            Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
-            createPassanger("Passanger #" + i, train);
-        }
-        //TODO: add passangers
-        for (int i = 0; i < 10; i++) {
-            Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
-            createPassanger("Passanger #" + i, train);
-        }
-        for (int i = 0; i < 10; i++) {
-            Passanger traveler = new Passanger(trainStation, "Passanger #" + i, true);
-            createPassanger("Passanger #" + i, train);
-        }
 
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
@@ -64,6 +51,9 @@ public class TrainGenerator extends ExternalEvent{
     }
 
     private void generateTrainList() {
+        trainListNotGeneratePassangers = new HashMap<>();
+        trainListGeneratePassangers = new HashMap<>();
+        trainListPickUpPassangers = new TreeMap<>();
         StationData sd = sg.getNextStationData();
         trainStation.totalTrains ++;
         Time arrivalTime = sd.getArrivalTime();
@@ -123,9 +113,8 @@ public class TrainGenerator extends ExternalEvent{
     private Passanger createPassanger(String name, Train train) {
         Passanger passanger = new Passanger(trainStation, name, true);
         train.addPassangerToTrain(passanger);
-        passanger.createTravelRoute(train);
+        passanger.createTravelRoute(train, getNextTrains(train.getExpectedArrivalTime().add(new Time(15)), train.getExpectedArrivalTime().add(new Time(50))));
 
         return passanger;
     }
-
 }

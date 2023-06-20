@@ -22,15 +22,13 @@ public class PassengerTransferEvent extends Event<Passanger>{
     public void eventRoutine(Passanger traveler) {
         
         //Passanger is not on right track
-        if (traveler.targetTrack != traveler.getArrivalTrack()) {
-            //TODO: Double check if you made an oopsie with the track indexing
-            
+        if (traveler.targetTrack != traveler.getArrivalTrack()) {    
             traveler.setArrivalTrack(traveler.targetTrack);
-            //TODO: Check if time is correct here
             traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + 4, TimeUnit.MINUTES));
         
         } else {
-            Train trainOnTrack = model.getTrackNo(traveler.getArrivalTrack() + 1).getTrainOnTrack();  //TODO: get train on track that pass stands on right now
+
+            Train trainOnTrack = model.getMyCurrentTrack(traveler.targetTrack).getTrainOnTrack();
             Train futureTrain = traveler.getConnectingTrain();
 
             //Passanger on correct track, but train is not
@@ -38,7 +36,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
                 if (futureTrain.isTrainCancled()) {
                     traveler.cancelTrain();
                 } else {
-                    traveler.increaseTravelTime(1);
+                    //TODO: Travel time increase
                     traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + 1, TimeUnit.MINUTES));
                 }
             }
@@ -48,7 +46,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
 
                 //further time delays that come from the train will be added through the train itself
                 futureTrain.addPassangerToTrain(traveler);
-                System.out.println("Passangere transferred successfully");
+                System.out.println("Passanger transferred successfully");
             }
         }
     }

@@ -1,4 +1,5 @@
 package src.Entities;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -38,43 +39,27 @@ public class Passanger extends Entity {
         CustomerService.GetInstance().addTraveler(this);
     }
 
-
-    /**
-     * Creates a travel route for the passanger with the specified starting train and the specified case.
-     * 
-     * Case 0: Direct travel (The end of the TravelRoute will be determindes randomly; Either the travel ends in salzburg, or the passanger stays seated in the same train)
-     * Case 1: Indirect travel (Passenger needs to change train in salzburg)
-     * 
-     * Case 1 is constructed such that it searches for random trains leaving salzburg approx. 10 - 60 minutes after planned arrival in salzburg.
-     * 
-     * @param caseID
-     * @param train that the passanger will be traveling in first (ie. the train in which the pass. is instanciated)
-     */
-    public void createTravelRoute(int caseID, Train train) {
-        if (caseID == 0) {
-            createDirectTravelRoute(train);
-
-        } else if (caseID == 1) {
-            createRouteWithTrainChange(train);
-        }
-    }
-
     /**
      * Creates a random travel route for the passanger based on the current train queue. 
      * The randomization decides, whether or not the route will be direct, or a train change is required
      * @param train
      */
-    public void createTravelRoute(Train train) {
+    public void createTravelRoute(Train train, ArrayList<Train> potentialConnectionTrains) {
 
-        Random rd = new Random();
-        double rdValue = rd.nextDouble(100);
-
-        if (rdValue <= 50) {
+        if (potentialConnectionTrains.isEmpty()) {
             createDirectTravelRoute(train);
 
         } else {
-            createRouteWithTrainChange(train);
-        }
+            
+            Random rd = new Random();
+            double rdValue = rd.nextDouble(100);
+
+            if (rdValue <= 50) {
+                createDirectTravelRoute(train);
+            } else {
+                createRouteWithTrainChange(train, potentialConnectionTrains);
+            }   
+        } 
     }
 
     //No changing train is required | Travel ends in salzburg
@@ -100,7 +85,6 @@ public class Passanger extends Entity {
         Random rd = new Random();
         Double rdPrice = (double) rd.nextInt(120);
         this.ticketPrice = rdPrice;
-        System.out.println("Ticketprice: " + rdPrice);
 
         StationModel.addRevenue(rdPrice);
     }
@@ -113,38 +97,17 @@ public class Passanger extends Entity {
      * 
      * @param train that the passanger starts in
      */
-    private void createRouteWithTrainChange(Train train) {
+    private void createRouteWithTrainChange(Train train, ArrayList<Train> potentialConnections) {
 
-        Time arrivalTime = train.getExpectedArrivalTime();  
-        Time difference;
-        Time otherArrivalTime;
-
-
-        for (Train connectingTrain : StationModel.trainsToCome) {
-            otherArrivalTime = connectingTrain.getExpectedArrivalTime();
-
-            if (arrivalTime.compareTo(otherArrivalTime) == -1) {
-                difference = arrivalTime.difference(otherArrivalTime);
-                
-                //this is the connecting train for this passanger
-                    this.connectingTrain = connectingTrain;
-                    this.travelRouteAttribute = 2;
-                    subscribeToConnectingTrain(connectingTrain);
-                    collectTicketPayment();
-                    return;
-
-
-                    //TODO: Time logic sucks
-                //difference needs to be larger than 10 minutes and smaller than 59 minutes (for simplicity to avoid dealing with 1h) 
-           //      if (difference.hour == 0 && difference.minute < 59) {
-
-                    
-            //    } 
-            }
+        if (potentialConnections.isEmpty()) {
+            throw new Error("Potential Connecting Trains is null! Not sure how you even made it this far.");
         }
 
-        //security if no matching train was found -> would otherwise create passangers without a route
-        createDirectTravelRoute(train);
+        this.connectingTrain = potentialConnections.get(0);
+        this.travelRouteAttribute = 2;
+        System.out.println("Created route with train change");
+        subscribeToConnectingTrain(connectingTrain);
+        collectTicketPayment();
     }
 
     private void subscribeToConnectingTrain(Train train) {

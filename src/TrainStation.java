@@ -62,6 +62,27 @@ public class TrainStation extends Model{
         return null;
     }
 
+
+
+    public Track whereIsTrainStanding(Train train) {
+
+        for (Track track : trainTracks) {
+            if (track.getTrainOnTrack() == train) {
+                return track;
+            }
+        }
+        return null;
+    }
+
+    public Track getMyCurrentTrack(int trackNum) {
+        for (Track track : trainTracks) {
+            if (track.getTrackNo() == trackNum) {
+                return track;
+            }
+        }
+        throw new Error("The track you were looking for dosn't exist. Looked for Track #" + trackNum);
+    }
+
     public boolean isTrackAvailable(int trackNo) {
         for(Track track : trainTracks) {
             if(track.getTrackNo() == trackNo) {
