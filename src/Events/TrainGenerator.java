@@ -40,6 +40,7 @@ public class TrainGenerator extends ExternalEvent{
         }
 
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
+        Logger.getInstance().log("Scheduled train with passangers for arrival at " + train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant().toString());
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
         trainStation.trainsToCome.add(train);
     }    
@@ -47,15 +48,17 @@ public class TrainGenerator extends ExternalEvent{
     private void generateTrainArrivalEvent(Train train) {
 
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
+        Logger.getInstance().log("Scheduled train without passangers for arrival at " + train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant().toString());
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
         trainStation.trainsToCome.add(train);
     }
 
     private void generateTrainList() {
+        Logger.getInstance().log("generating Train List");
         trainListNotGeneratePassangers = new HashMap<>();
         trainListGeneratePassangers = new HashMap<>();
         trainListPickUpPassangers = new TreeMap<>();
-        while(!sg.isDataEmpty()){ 
+        while(!sg.isDataEmpty()){                                                       
             StationData sd = sg.getNextStationData();
             trainStation.totalTrains ++;
             Statistics.getInstance().incrementTrains();
@@ -64,7 +67,7 @@ public class TrainGenerator extends ExternalEvent{
             Week schedule = sd.getWeek();
             int day;
             for(day = 0; day < 7; day++) { 
-                if(schedule.isActive(day)) { 
+                if(schedule.isActive(day)) {                                                                
                     Time localArrivalTime = arrivalTime.add(new Time(day * 24, 0, 0));
                     Time localDepartureTime = departureTime.add(new Time(day * 24, 0, 0));
                     //wrap around after 1 week
@@ -95,6 +98,7 @@ public class TrainGenerator extends ExternalEvent{
 
     private Train generateTrain(StationData sd, Time arrivalTime, Time departureTime) {
         Train train = new Train(trainStation, sd.getTripID(), true, arrivalTime, sd.getTrackNumber(), departureTime);
+        Logger.getInstance().log("creating Train with trip ID" + sd.getTripID());
         return train;
     }
 

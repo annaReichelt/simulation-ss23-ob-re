@@ -25,9 +25,11 @@ public class TrainArrivalEvent extends Event<Train>{
 
         int trackNumber = train.getActualArrivalTrack();
         if(model.isTrackAvailable(trackNumber)) { 
+
+            Logger.getInstance().log("Train " + train.getName() + "target track is free. Setting track to unavailable.");
             model.getTrackNo(trackNumber).setFree(false);
             model.getTrackNo(trackNumber).setTrainOnTrack(train);
-
+            
             //Passanger Stuff
             HashSet<Passanger> exitingPassangers = new HashSet<Passanger>();
             int travelType;
@@ -38,16 +40,18 @@ public class TrainArrivalEvent extends Event<Train>{
                 travelType = traveler.getTravelRoutAttribute();
 
                 if (travelType == 0) {
+                    Logger.getInstance().log("Passanger " + traveler.getName() + "is leavin Train. Travel complete.");
                     exitingPassangers.add(traveler);
 
                 } else if (travelType == 2) {
                     //train change, passanger exits train
                     exitingPassangers.add(traveler);
+                    Logger.getInstance().log("Passanger " + traveler.getName() + "needs to change train.");
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
                     pTransferEvent.eventRoutine(traveler);
                 
                 } else if (travelType == 1) {
-
+                    Logger.getInstance().log("Passanger " + traveler.getName() + "stays seated.");
                 } else {
                     //travel type hasnt been set -> error
                     throw new Error("Travel Type hasn't been set correctly. Needs to be set to 0, 1 or 2 in Passanger.java");
@@ -58,6 +62,7 @@ public class TrainArrivalEvent extends Event<Train>{
 
             //remove passangers from original train
             for (Passanger passanger : exitingPassangers) {
+                Logger.getInstance().log("Passanger " + passanger.getName() + "removed from passangerlist of train " + train.getName());
                 if (!train.removePassanger(passanger)) {
                     throw new Error("Passanger couldn't be removed from Train");
                 }
@@ -65,6 +70,7 @@ public class TrainArrivalEvent extends Event<Train>{
 
             //Start train departure event
             TrainDepartureEvent newEvent = new TrainDepartureEvent(model, "Zugausfahrt " + train.getName(), true);
+            Logger.getInstance().log("creating new departure event for train " + train.getName());
             newEvent.schedule(train, train.addToDepartureTime(model.getDelayTime()).toTimeInstant());
 
         }
