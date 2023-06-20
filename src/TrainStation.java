@@ -4,6 +4,7 @@ import java.util.*;
 import org.hamcrest.CustomMatcher;
 
 import desmoj.core.dist.ContDistExponential;
+import desmoj.core.dist.ContDistUniform;
 import desmoj.core.simulator.*;
 //import desmoj.extensions.visualization2d.engine.model.Statistic;
 import desmoj.core.simulator.Queue;
@@ -97,10 +98,18 @@ public class TrainStation extends Model{
     // Modelkomponents:
 
     private ContDistExponential delayTime;
+    private ContDistUniform dist;
 
     public double getDelayTime() {
-        return 0.0;
-        //return delayTime.sample();
+        //return 0.0;
+        return delayTime.sample();
+    }
+
+    public int randomInt(int min, int max) {
+        // return 0;
+        double d = dist.sample(); //value 0 - 1
+        int range = max - min;
+        return (int) (d * range) + min;
     }
 
     // if no track is available, the train has to wait
@@ -134,6 +143,7 @@ public class TrainStation extends Model{
         // Par 5: show in trace?
         delayTime = new ContDistExponential(this, "DelayTime", 3.0, true, true);
         delayTime.setNonNegative(true);
+        dist = new ContDistUniform(this, "Dist", 0.0, 1.0, true, true);
 
         sg = StationGenerator.getInstance();
         this.stationName = sg.getMainsStaion();

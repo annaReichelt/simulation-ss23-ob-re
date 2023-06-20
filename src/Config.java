@@ -9,7 +9,9 @@ public enum Config {
     TRACE_PASSANGERS(0), //0 = false, 1 == true
     TRACE_TRAINS(0),
     TRACE_TRACKS(0),
-    MIN_CHANGE_TIME(10); //between 10 - 59 minutes
+    MIN_CHANGE_TIME(10), //between 10 - 59 minutes
+    SWITCH_TRACK_PENALTY(0),
+    FROM_QUEUE_TO_TRACK_TIME(5),
 
 
 

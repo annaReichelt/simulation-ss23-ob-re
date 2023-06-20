@@ -3,6 +3,7 @@ package src.Events;
 import desmoj.core.simulator.*;
 import src.*;
 import src.Entities.*;
+import src.RouteData.*;
 
 public class TrainDepartureEvent extends Event<Train>{
     
@@ -28,11 +29,15 @@ public class TrainDepartureEvent extends Event<Train>{
         Logger.getInstance().log("Train " + train.getName() + "was removed from station. TrackNo" + usedTrack.getTrackNo() + "is free: " + usedTrack.isFree());
 
         if(!model.trainQueue.isEmpty()) {
+            double penalty = Config.FROM_QUEUE_TO_TRACK_TIME.getValue();
+            Time depatureTime = train.getActualDepartureTime();
             Train nextTrain = model.trainQueue.first();
+            Time arrivalTime = depatureTime.add(new Time(penalty));
             model.trainQueue.remove(nextTrain);
             nextTrain.setActualArrivalTrack(train.getActualArrivalTrack());
+            nextTrain.setActualArrivalTime(arrivalTime);
             TrainArrivalEvent newEvent = new TrainArrivalEvent(model, "Zugeinfahrt nach Warten " + nextTrain.getName(), true);
-            newEvent.schedule(nextTrain, new TimeSpan(5.0)); //5 minutes for switching tracks
+            newEvent.schedule(nextTrain, arrivalTime.toTimeInstant()); //5 minutes for switching tracks
             model.trainsToCome.remove(train);
         }
         

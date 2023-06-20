@@ -135,12 +135,8 @@ public class Train extends Entity{
         this.isDeparted = true;
     }
 
-    public void setActualArrivalTime(double minutes) {
-        Time incTime = new Time(minutes);
-        if(actualArrivalTime.compareTo(incTime) != 0) {
-            System.out.println("Queing happend");
-            this.actualArrivalTime = incTime;
-        }
+    public void setActualArrivalTime(Time incTime) {
+        this.actualArrivalTime = incTime;
     }
 
     public String toString() {

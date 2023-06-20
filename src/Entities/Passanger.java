@@ -31,11 +31,11 @@ public class Passanger extends Entity {
     private boolean trainMissed = false;
 
     //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train
-    private int travelRouteAttribute;   
+    private int travelRouteAttribute;
 
     //Track that the passanger needs to go to, if he changes trains
     public int targetTrack;
-    
+
     public Passanger(Model owner, String name, boolean showInTrace) {
         super(owner, name, Config.TRACE_PASSANGERS.getBool());
         this.StationModel = (TrainStation) owner;
@@ -43,7 +43,7 @@ public class Passanger extends Entity {
     }
 
     /**
-     * Creates a random travel route for the passanger based on the current train queue. 
+     * Creates a random travel route for the passanger based on the current train queue.
      * The randomization decides, whether or not the route will be direct, or a train change is required
      * @param train
      */
@@ -53,7 +53,7 @@ public class Passanger extends Entity {
             createDirectTravelRoute(train);
 
         } else {
-            
+
             Random rd = new Random();
             double rdValue = rd.nextDouble(100);
 
@@ -61,7 +61,7 @@ public class Passanger extends Entity {
                 createDirectTravelRoute(train);
             } else {
                 createRouteWithTrainChange(train, potentialConnectionTrains);
-            }   
+            }
         }
         setArrivalTrack(train.getExpectedArrivalTrack());
     }
@@ -81,7 +81,7 @@ public class Passanger extends Entity {
         } else {
             //Where exactly does not matter to us
             this.destinationName = "Valhalla";
-            this.travelRouteAttribute = 1; 
+            this.travelRouteAttribute = 1;
             Statistics.getInstance().incrementDirectTravelRoutes();
         }
         collectTicketPayment();
@@ -97,10 +97,10 @@ public class Passanger extends Entity {
 
     /**
      * Uses the model Queue to find the next train leaving Salzburg 10 - 59 minutes after planned arrival and assigns
-     * that train as the connecting train, which the passanger subscribes to. 
-     * 
+     * that train as the connecting train, which the passanger subscribes to.
+     *
      * We assume that the first available train in that time frame is their connecting train due to their implecable travel planning skillz
-     * 
+     *
      * @param train that the passanger starts in
      */
     private void createRouteWithTrainChange(Train train, ArrayList<Train> potentialConnections) {
@@ -109,7 +109,7 @@ public class Passanger extends Entity {
             throw new Error("Potential Connecting Trains is null! Not sure how you even made it this far.");
         }
 
-        this.connectingTrain = potentialConnections.get(0);
+        this.connectingTrain = potentialConnections.get(random(potentialConnections.size()));
         this.travelRouteAttribute = 2;
         Statistics.getInstance().incementRoutesWithTrainChange();
         this.targetTrack = connectingTrain.getExpectedArrivalTrack();
@@ -127,6 +127,11 @@ public class Passanger extends Entity {
 
     public int getTravelDelay() {
         return this.actualTravelTime - this.departureTime;
+    }
+
+    private int random(int max) {
+        Random rd = new Random(StationModel.randomInt(0, max));
+        return rd.nextInt(max);
     }
 
     //Getters, Setters...
