@@ -35,24 +35,29 @@ public class PassengerTransferEvent extends Event<Passanger>{
             Logger.getInstance().log("Passanger " + traveler.getName() + " needs to change track from  " + traveler.getArrivalTrack() + " to " + traveler.targetTrack);
             traveler.setArrivalTrack(traveler.targetTrack);
             PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to change tracks", isCurrent());
-            pte.schedule(traveler, new TimeSpan(4.0, TimeUnit.MINUTES));
-        
+            pte.schedule(traveler, new TimeSpan(4.0));
+
         } else {
             Train trainOnTrack = model.getTrackNo(traveler.getArrivalTrack()).getTrainOnTrack();
             Train futureTrain = traveler.getConnectingTrain();
 
             Logger.getInstance().log("Passanger " + traveler.getName() + " on correct track " + traveler.getArrivalTrack());
 
+            // log train on track and future train
+            //Logger.getInstance().log("Train on track: " + trainOnTrack + " Future train: " + futureTrain);
+
             //Passanger on correct track, but train is not
-            if (trainOnTrack == null) { 
+            if (trainOnTrack == null) {
                 if (futureTrain.isTrainCancled()) {
                     traveler.cancelTrain();
+                    Logger.getInstance().log("Passanger " + traveler.getName() + " canceled his train.");
                 } else {
+                    Logger.getInstance().log("Track: " + model.getTrackNo(traveler.getArrivalTrack()));
                     //TODO: Travel time increase
                     Logger.getInstance().log("Passanger " + traveler.getName() + " on correct track " + traveler.getArrivalTrack() + " but train isnt.");
                     traveler.setArrivalTrack(traveler.connectingTrain.getActualArrivalTrack());
                     PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to wait", isCurrent());
-                    pte.schedule(traveler, new TimeSpan(1.0, TimeUnit.MINUTES));
+                    pte.schedule(traveler, new TimeSpan(1.0));
                 }
             }
 

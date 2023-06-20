@@ -27,7 +27,7 @@ public class TrainArrivalEvent extends Event<Train>{
         int trackNumber = train.getActualArrivalTrack();
         if(model.isTrackAvailable(trackNumber)) {
 
-            Logger.getInstance().log("Train " + train.getName() + "target track is free. Setting " + train.getActualArrivalTrack() + " to unavailable.");
+            Logger.getInstance().log("Train " + train.getName() + " arriving and target track is free. Setting " + trackNumber + " to unavailable.");
             model.getTrackNo(trackNumber).setFree(false);
             model.getTrackNo(trackNumber).setTrainOnTrack(train);
 
@@ -49,7 +49,7 @@ public class TrainArrivalEvent extends Event<Train>{
                     exitingPassangers.add(traveler);
                     Logger.getInstance().log("Passanger " + traveler.getName() + "needs to change train.");
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
-                    pTransferEvent.schedule(traveler, new TimeSpan(0.0, TimeUnit.MINUTES));
+                    pTransferEvent.schedule(traveler, new TimeSpan(0.0));
                 
                 } else if (travelType == 1) {
                     Logger.getInstance().log("Passanger " + traveler.getName() + "stays seated.");

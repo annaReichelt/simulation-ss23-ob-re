@@ -97,7 +97,7 @@ public class TrainStation extends Model{
 
     public double getDelayTime() {
         return 0.0;
-//        return delayTime.sample();
+        //return delayTime.sample();
     }
 
     // if no track is available, the train has to wait

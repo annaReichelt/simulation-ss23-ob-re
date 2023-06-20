@@ -86,8 +86,6 @@ public class Train extends Entity{
     }
 
     public void setActualArrivalTrack(int actualArrivalTrack) {
-        if(actualArrivalTrack != expectedArrivalTrack)
-            System.out.println("Track Chance");
         this.actualArrivalTrack = actualArrivalTrack;
         announceTrackChange();
     }
@@ -97,9 +95,9 @@ public class Train extends Entity{
         if(actualArrivalTime.compareTo(actualDepartureTime) > 0) {
             actualDepartureTime = actualArrivalTime;
         }
-        // make sure the Train has a minimum of 2 Minutes to unload and load passengers
-        if(actualDepartureTime.compareTo(actualArrivalTime.add(new Time(2))) < 0) {
-            actualDepartureTime = actualArrivalTime.add(new Time(2));
+        // make sure the Train has a minimum of 4 Minutes to unload and load passengers
+        if(actualDepartureTime.compareTo(actualArrivalTime.add(new Time(4))) < 0) {
+            actualDepartureTime = actualArrivalTime.add(new Time(4));
         }
         return this.actualArrivalTime;
     }
@@ -135,5 +133,9 @@ public class Train extends Entity{
 
     public void setTrainDeparted() {
         this.isDeparted = true;
+    }
+
+    public String toString() {
+        return "Train " + getName() + " is expected to arrive at " + expectedArrivalTime + " on track " + expectedArrivalTrack + " and depart at " + expectedDepartureTime + " on track " + actualArrivalTrack + " with " + passengersOnTrain.size() + " passengers on board";
     }
 }

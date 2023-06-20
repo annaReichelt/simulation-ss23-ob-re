@@ -37,4 +37,8 @@ public class Track extends Entity {
     public int getTrackNo() {
         return trackNumber;
     }
+
+    public String toString() {
+        return "Track " + trackNumber + " is free: " + isFree + " Train on track: " + ((trainOnThisTrack == null) ? "none" : trainOnThisTrack.getName());
+    }
 }
