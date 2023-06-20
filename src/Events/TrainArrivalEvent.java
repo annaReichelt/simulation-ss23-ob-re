@@ -31,8 +31,6 @@ public class TrainArrivalEvent extends Event<Train>{
             model.getTrackNo(trackNumber).setFree(false);
             model.getTrackNo(trackNumber).setTrainOnTrack(train);
 
-            train.setActualArrivalTime(model.presentTime().getTimeAsDouble());
-
             //Passanger Stuff
             HashSet<Passanger> exitingPassangers = new HashSet<Passanger>();
             int travelType;
@@ -90,13 +88,13 @@ public class TrainArrivalEvent extends Event<Train>{
                 train.announceTrackChange();
                 TrainArrivalEvent newEvent = new TrainArrivalEvent(model, getName() + " new Track", true);
 
-                Double timePenalty = 3.0;
+                Double timePenalty = (double)Config.SWITCH_TRACK_PENALTY.getValue();
                 
                 for (Passanger pass : train.getPassangersOnTrain()) {
                     pass.actualTravelTime += timePenalty;
                 }
 
-                newEvent.schedule(train, new TimeSpan(timePenalty)); //for now switching tracks is free
+                newEvent.schedule(train, new TimeSpan(timePenalty));
             }
         }
     
