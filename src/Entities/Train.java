@@ -9,7 +9,7 @@ import src.RouteData.*;
 public class Train extends Entity{
     
     private HashSet<Passanger> passengersOnTrain = new HashSet<Passanger>();
-    private ArrayList<Passanger> futureTravelers = new ArrayList<Passanger>();
+    public ArrayList<Passanger> futureTravelers = new ArrayList<Passanger>();
     private Time expectedArrivalTime;
     private Time actualArrivalTime;
     private Time expectedDepartureTime;
@@ -38,7 +38,7 @@ public class Train extends Entity{
         futureTravelers.add(traveler);
     }
 
-    private void announceTrackChange() {
+    public void announceTrackChange() {
 
         //inform future travelers where they need to go
         for (Passanger traveler : futureTravelers) {

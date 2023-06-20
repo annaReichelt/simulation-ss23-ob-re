@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.*;
 import src.Config;
+import src.Logger;
 import src.TrainStation;
 import src.Entities.*;
 
@@ -21,14 +22,19 @@ public class PassengerTransferEvent extends Event<Passanger>{
     @Override
     public void eventRoutine(Passanger traveler) {
 
+        Logger.getInstance().log("Creating new transfere event for " + traveler.getName());
+
         //Passanger is not on right track
-        if (traveler.targetTrack != traveler.getArrivalTrack()) {    
+        if (traveler.targetTrack != traveler.getArrivalTrack()) {
+            Logger.getInstance().log("Passanger " + traveler.getName() + " needs to change track from  " + traveler.getArrivalTrack() + " to " + traveler.targetTrack);
             traveler.setArrivalTrack(traveler.targetTrack);
-            traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + 4, TimeUnit.MINUTES));
+            traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeSpan(4.0, TimeUnit.MINUTES));
         
         } else {
             Train trainOnTrack = model.getTrackNo(traveler.getArrivalTrack()).getTrainOnTrack();
             Train futureTrain = traveler.getConnectingTrain();
+
+            Logger.getInstance().log("Passanger " + traveler.getName() + " on correct track " + traveler.getArrivalTrack());
 
             //Passanger on correct track, but train is not
             if (trainOnTrack == null) { 
@@ -36,15 +42,18 @@ public class PassengerTransferEvent extends Event<Passanger>{
                     traveler.cancelTrain();
                 } else {
                     //TODO: Travel time increase
-                    traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + 1, TimeUnit.MINUTES));
+                    Logger.getInstance().log("Passanger " + traveler.getName() + " on correct track " + traveler.getArrivalTrack() + " but train isnt.");
+                    traveler.setArrivalTrack(traveler.connectingTrain.getActualArrivalTrack());
+                    traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeSpan(3.0, TimeUnit.MINUTES));
                 }
             }
 
             //Passanger on correct track, Train on correct track
             if (trainOnTrack == futureTrain) {
-
+                
                 //further time delays that come from the train will be added through the train itself
                 futureTrain.addPassangerToTrain(traveler);
+                Logger.getInstance().log("Passanger " + traveler.getName() + " transferred successfully.");
                 System.out.println("Passanger transferred successfully");
             }
         }

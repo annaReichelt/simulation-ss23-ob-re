@@ -24,7 +24,7 @@ public class Passanger extends Entity {
     private double ticketPrice;
 
     private TrainStation StationModel;
-    private Train connectingTrain = null;
+    public Train connectingTrain = null;
     private boolean trainIsCanceled = false;
 
     //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train

@@ -1,6 +1,7 @@
 package src.Events;
 
 import java.util.HashSet;
+import java.util.concurrent.TimeUnit;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import desmoj.core.simulator.*;
@@ -48,7 +49,7 @@ public class TrainArrivalEvent extends Event<Train>{
                     exitingPassangers.add(traveler);
                     Logger.getInstance().log("Passanger " + traveler.getName() + "needs to change train.");
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
-                    pTransferEvent.schedule(traveler, new TimeSpan(0.0));
+                    pTransferEvent.schedule(traveler, new TimeSpan(0.0, TimeUnit.MINUTES));
                 
                 } else if (travelType == 1) {
                     Logger.getInstance().log("Passanger " + traveler.getName() + "stays seated.");
@@ -84,6 +85,7 @@ public class TrainArrivalEvent extends Event<Train>{
             else {
                 train.setActualArrivalTrack(newTrackNo);
                 informPassangersChangedArrivalTrack(train, newTrackNo);
+                train.announceTrackChange();
                 TrainArrivalEvent newEvent = new TrainArrivalEvent(model, getName() + " new Track", true);
 
                 //TODO: Time penalty for track change
@@ -97,5 +99,10 @@ public class TrainArrivalEvent extends Event<Train>{
         for (Passanger traveler : train.getPassangersOnTrain()) {
             traveler.setArrivalTrack(newTrack);
         }
+
+        for (Passanger traveler : train.futureTravelers) {
+            traveler.targetTrack = newTrack;
+        }
+
     }
 }
