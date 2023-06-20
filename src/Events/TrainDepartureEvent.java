@@ -24,6 +24,7 @@ public class TrainDepartureEvent extends Event<Train>{
         Track usedTrack = model.getTrackNo(train.getActualArrivalTrack()); 
         usedTrack.setFree(true);
         usedTrack.setTrainOnTrack(null);
+        train.setTrainDeparted();
         Logger.getInstance().log("Train " + train.getName() + "was removed from station. TrackNo" + usedTrack.getTrackNo() + "is free: " + usedTrack.isFree());
 
         if(!model.trainQueue.isEmpty()) {

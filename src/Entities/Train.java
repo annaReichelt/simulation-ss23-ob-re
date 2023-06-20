@@ -17,6 +17,7 @@ public class Train extends Entity{
     private int expectedArrivalTrack;
     private int actualArrivalTrack;
     private boolean isCancled = false;
+    private boolean isDeparted = false;
 
     TrainStation station;
 
@@ -126,5 +127,13 @@ public class Train extends Entity{
 
     public boolean isTrainCancled() {
         return this.isCancled;
+    }
+
+    public boolean isTrainDeparted() {
+        return this.isDeparted;
+    }
+
+    public void setTrainDeparted() {
+        this.isDeparted = true;
     }
 }
