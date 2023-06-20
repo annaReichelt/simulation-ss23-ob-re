@@ -11,11 +11,10 @@ public enum Config {
     TRACE_TRACKS(0),
     MIN_CHANGE_TIME(10), //between 10 - 59 minutes
     SWITCH_TRACK_PENALTY(0),
-    FROM_QUEUE_TO_TRACK_TIME(5),
-
-
+    FROM_QUEUE_TO_TRACK_TIME(5);
 
     private final int value;
+
     Config(int value) { this.value = value; }
     public int getValue() { return value; }
     public boolean getBool() {
