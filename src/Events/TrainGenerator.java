@@ -35,7 +35,11 @@ public class TrainGenerator extends ExternalEvent{
 
     private void generateTrainArrivalEventWithPassangers(Train train) {
 
-        for (int i = 0; i < 10; i++) {
+        double pasNum;
+        Random rd = new Random();
+        pasNum = rd.nextGaussian()*500;
+
+        for (int i = 0; i < pasNum; i++) {
             createPassanger("Passanger #" + i, train);
         }
 
@@ -75,7 +79,7 @@ public class TrainGenerator extends ExternalEvent{
             Time departureTime = sd.getDepartureTime();
             Week schedule = sd.getWeek();
             int day;
-            for(day = 0; day < 1; day++) { 
+            for(day = 0; day < 7; day++) { 
                 if(schedule.isActive(day)) {                                                                
                     Time localArrivalTime = arrivalTime.add(new Time(day * 24, 0, 0));
                     Time localDepartureTime = departureTime.add(new Time(day * 24, 0, 0));
