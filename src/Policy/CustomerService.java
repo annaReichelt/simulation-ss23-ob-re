@@ -10,6 +10,9 @@ public class CustomerService {
     //singleton class
     private static CustomerService cs;
 
+    int totalDelay = 0;
+    double avgHappiness = 0;
+
     private HashSet<Passanger> travelers = new HashSet<Passanger>();
     private TrainStation model;
 
@@ -43,11 +46,10 @@ public class CustomerService {
     public void runStatistics() {
 
         int travelDelay;
-        int totalDelay = 0;
         double ticketPrice;
 
         for (Passanger p : travelers) {
-            
+
             //Get delay 
             travelDelay = p.getTravelDelay();
             totalDelay += travelDelay;
@@ -66,7 +68,13 @@ public class CustomerService {
             } else {
                 p.decreaseHappiness(Happiness.LARGE_MALUS.getValue());
                 this.model.addLossesFromRefunds(Refund.LARGE_REFUND.getValue() * ticketPrice);
-            } 
+            }
+
+            avgHappiness += p.getHappiness();
+
         }
+
+        avgHappiness = avgHappiness / travelers.size();
+        System.out.println("Average Happiness: " + avgHappiness);
     }
 }
