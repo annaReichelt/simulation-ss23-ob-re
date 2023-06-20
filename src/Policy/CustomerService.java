@@ -59,19 +59,23 @@ public class CustomerService {
             if (p.isTrainMissed()) {
                 p.decreaseHappiness(Happiness.CANCELED_MALUS.getValue());
                 this.model.addLossesFromRefunds(Refund.CANCELED_REFUND.getValue() * ticketPrice);
-            } else if (travelDelay <= 15) {
+            
+            } else if (travelDelay <= Delays.NO_DELAY.getValue()) {
+                //nothing happens...
+            
+            } else if (travelDelay <= Delays.SLIGHT_DELAY.getValue()) {
                 p.decreaseHappiness(Happiness.SMALL_MALUS.getValue());
                 this.model.addLossesFromRefunds(Refund.SMALL_REFUND.getValue() * ticketPrice);
-            } else if (travelDelay <= 30) {
+            
+            } else if (travelDelay <= Delays.NORMAL_DELAY.getValue()) {
                 p.decreaseHappiness(Happiness.NORMAL_MALUS.getValue());
                 this.model.addLossesFromRefunds(Refund.NORMAL_REFUND.getValue() * ticketPrice);
+            
             } else {
                 p.decreaseHappiness(Happiness.LARGE_MALUS.getValue());
                 this.model.addLossesFromRefunds(Refund.LARGE_REFUND.getValue() * ticketPrice);
             }
-
             avgHappiness += p.getHappiness();
-
         }
 
         avgHappiness = avgHappiness / travelers.size();
