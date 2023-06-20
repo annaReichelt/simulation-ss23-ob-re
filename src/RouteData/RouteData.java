@@ -55,8 +55,8 @@ public class RouteData {
 
     private void crunchData() {
         // read from file stops.txt
-        String rawPath = "src/RouteData/rawData";
-        String filePath = rawPath + "/stops.txt";
+        String rawPath = "simulation-ss23-ob-re\\src\\RouteData\\rawData";
+        String filePath = rawPath + "\\stops.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -81,7 +81,7 @@ public class RouteData {
         // read from file stop_times.txt
         boolean stop = false;
         StationData stationData = new StationData("", -1, new Time("00:00:00"), new Time("00:00:00"), 0, ""); //so compiler doesn't complain
-        filePath = rawPath + "/stop_times.txt";
+        filePath = rawPath + "\\stop_times.txt";
          try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -90,7 +90,7 @@ public class RouteData {
                 String[] values = line.split(",");
                 if(stop) {
                     stationData.setStationName(values[3]);
-                    if(values[8].replace("\"", "") == "0.00" )
+                    if(values[8].replace("\"", "").equals("0.00"))
                         // ending station
                         stationData.setAddInfo(2);
                     stop = false;
@@ -99,7 +99,7 @@ public class RouteData {
                     String[] trackNr = values[3].replace("\"", "").split(":");
                     int addInfo = 0;
                     //shape_dist_traveled == 0 -> starting station
-                    if(values[8].replace("\"", "") == "0.00" )
+                    if(values[8].replace("\"", "").equals("0.00"))
                         addInfo = 1;
                     stationData = new StationData("", Integer.parseInt(trackNr[trackNr.length - 1]) ,
                                                     new Time(values[1]), new Time(values[2]), addInfo, values[0]);
@@ -113,7 +113,7 @@ public class RouteData {
         }
 
         // read from file trips.txt
-        filePath = rawPath + "/trips.txt";
+        filePath = rawPath + "\\trips.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -136,7 +136,7 @@ public class RouteData {
         }
 
         // read from file calendar.txt
-        filePath = rawPath + "/calendar.txt";
+        filePath = rawPath + "\\calendar.txt";
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
           String line;
             while ((line = br.readLine()) != null) {
