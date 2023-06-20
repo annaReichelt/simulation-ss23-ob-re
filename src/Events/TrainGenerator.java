@@ -42,12 +42,15 @@ public class TrainGenerator extends ExternalEvent{
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
         Logger.getInstance().log("Scheduled train with passangers for arrival at " + train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant().toString());
 
+        double delay = trainStation.getDelayTime();
+        train.addToArrivalTime(delay);
+
         for (Passanger pass : train.getPassangersOnTrain()) {
-            pass.expectedArrivalTime = train.addToArrivalTime(trainStation.getDelayTime()).toMinutes();
-            pass.actualTravelTime = train.addToArrivalTime(trainStation.getDelayTime()).toMinutes();
+            pass.expectedArrivalTime = train.getExpectedArrivalTime().toMinutes();
+            pass.actualTravelTime = train.getActualArrivalTime().toMinutes();
         }
 
-        tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
+        tae.schedule(train, train.getActualArrivalTime().toTimeInstant());
         trainStation.trainsToCome.add(train);
     }    
 
