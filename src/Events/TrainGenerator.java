@@ -22,9 +22,7 @@ public class TrainGenerator extends ExternalEvent{
     }
 
     public void eventRoutine() {
-        while(!sg.isDataEmpty()){
-            generateTrainList();
-        }
+        generateTrainList();
         for(Train train : trainListGeneratePassangers.values()) {
             generateTrainArrivalEventWithPassangers(train);
         }
@@ -54,36 +52,38 @@ public class TrainGenerator extends ExternalEvent{
         trainListNotGeneratePassangers = new HashMap<>();
         trainListGeneratePassangers = new HashMap<>();
         trainListPickUpPassangers = new TreeMap<>();
-        StationData sd = sg.getNextStationData();
-        trainStation.totalTrains ++;
-        Time arrivalTime = sd.getArrivalTime();
-        Time departureTime = sd.getDepartureTime();
-        Week schedule = sd.getWeek();
-        int day;
-        for(day = 0; day < 7; day++) {
-            if(schedule.isActive(day)) {
-                Time localArrivalTime = arrivalTime.add(new Time(day * 24, 0, 0));
-                Time localDepartureTime = departureTime.add(new Time(day * 24, 0, 0));
-                //wrap around after 1 week
-                if(localArrivalTime.compareTo(new Time(7 * 24, 0, 0)) >= 0) {
-                    localArrivalTime = localArrivalTime.add(new Time(-7 * 24, 0, 0));
-                }
-                if(localDepartureTime.compareTo(new Time(7 * 24, 0, 0)) >= 0) {
-                    localDepartureTime = localDepartureTime.add(new Time(-7 * 24, 0, 0));
-                }
-                Train localTrain = generateTrain(sd, localArrivalTime, localDepartureTime);
-                switch (sd.getAddInfo()) { // 0 = no info, 1 = startingStation, 2 = endingStation
-                    case 1:
-                        trainListPickUpPassangers.put(localArrivalTime, localTrain);
-                        trainListNotGeneratePassangers.put(localArrivalTime, localTrain);
-                        break;
-                    case 2:
-                        trainListGeneratePassangers.put(localArrivalTime, localTrain);
-                        break;
-                    default:
-                        trainListPickUpPassangers.put(localArrivalTime, localTrain);
-                        trainListGeneratePassangers.put(localArrivalTime, localTrain);
-                        break;
+        while(!sg.isDataEmpty()){
+            StationData sd = sg.getNextStationData();
+            trainStation.totalTrains ++;
+            Time arrivalTime = sd.getArrivalTime();
+            Time departureTime = sd.getDepartureTime();
+            Week schedule = sd.getWeek();
+            int day;
+            for(day = 0; day < 7; day++) {
+                if(schedule.isActive(day)) {
+                    Time localArrivalTime = arrivalTime.add(new Time(day * 24, 0, 0));
+                    Time localDepartureTime = departureTime.add(new Time(day * 24, 0, 0));
+                    //wrap around after 1 week
+                    if(localArrivalTime.compareTo(new Time(7 * 24, 0, 0)) >= 0) {
+                        localArrivalTime = localArrivalTime.add(new Time(-7 * 24, 0, 0));
+                    }
+                    if(localDepartureTime.compareTo(new Time(7 * 24, 0, 0)) >= 0) {
+                        localDepartureTime = localDepartureTime.add(new Time(-7 * 24, 0, 0));
+                    }
+                    Train localTrain = generateTrain(sd, localArrivalTime, localDepartureTime);
+                    switch (sd.getAddInfo()) { // 0 = no info, 1 = startingStation, 2 = endingStation
+                        case 1:
+                            trainListPickUpPassangers.put(localArrivalTime, localTrain);
+                            trainListNotGeneratePassangers.put(localArrivalTime, localTrain);
+                            break;
+                        case 2:
+                            trainListGeneratePassangers.put(localArrivalTime, localTrain);
+                            break;
+                        default:
+                            trainListPickUpPassangers.put(localArrivalTime, localTrain);
+                            trainListGeneratePassangers.put(localArrivalTime, localTrain);
+                            break;
+                    }
                 }
             }
         }
