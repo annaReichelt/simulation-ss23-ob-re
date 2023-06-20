@@ -24,7 +24,7 @@ public class TrainArrivalEvent extends Event<Train>{
     public void eventRoutine(Train train) {
 
         int trackNumber = train.getActualArrivalTrack();
-        if(model.isTrackAvailable(trackNumber)) {
+        if(model.isTrackAvailable(trackNumber)) { 
             model.getTrackNo(trackNumber).setFree(false);
             model.getTrackNo(trackNumber).setTrainOnTrack(train);
 
@@ -57,7 +57,6 @@ public class TrainArrivalEvent extends Event<Train>{
             }
 
             //remove passangers from original train
-            //TODO: There is a way to manipulate the hashset while iterating but I cant be assed to look it up right now
             for (Passanger passanger : exitingPassangers) {
                 if (!train.removePassanger(passanger)) {
                     throw new Error("Passanger couldn't be removed from Train");
@@ -71,7 +70,7 @@ public class TrainArrivalEvent extends Event<Train>{
         }
         else {
             int newTrackNo = model.getFreeTrackNo();
-            if(newTrackNo == -1) {
+            if(newTrackNo == -1) { 
                 // no free track available
                 model.trainQueue.insert(train);
                 //TODO: Added time needs to be recorded
@@ -80,6 +79,8 @@ public class TrainArrivalEvent extends Event<Train>{
                 train.setActualArrivalTrack(newTrackNo);
                 informPassangersChangedArrivalTrack(train, newTrackNo);
                 TrainArrivalEvent newEvent = new TrainArrivalEvent(model, getName() + " new Track", true);
+
+                //TODO: Time penalty for track change
                 newEvent.schedule(train, new TimeSpan(0.0)); //for now switching tracks is free
             }
         }

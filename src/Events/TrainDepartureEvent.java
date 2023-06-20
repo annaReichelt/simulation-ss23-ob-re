@@ -19,7 +19,13 @@ public class TrainDepartureEvent extends Event<Train>{
     }
 
     public void eventRoutine(Train train) {
-        model.getTrackNo(train.getActualArrivalTrack()).setFree(true);
+
+        //setting track free actually works
+        Track usedTrack = model.getTrackNo(train.getActualArrivalTrack()); 
+        
+        usedTrack.setFree(true);
+        usedTrack.setTrainOnTrack(null);
+
         if(!model.trainQueue.isEmpty()) {
             Train nextTrain = model.trainQueue.first();
             model.trainQueue.remove(nextTrain);

@@ -46,10 +46,6 @@ public class TrainGenerator extends ExternalEvent{
 
     private void generateTrainArrivalEvent(Train train) {
 
-        for (int i = 0; i < 10; i++) {
-            createPassanger("Passanger #" + i, train);
-        }
-
         TrainArrivalEvent tae = new TrainArrivalEvent(trainStation, "Zugeinfahrt " + train.getName(), true);
         tae.schedule(train, train.addToArrivalTime(trainStation.getDelayTime()).toTimeInstant());
         trainStation.trainsToCome.add(train);
@@ -62,6 +58,7 @@ public class TrainGenerator extends ExternalEvent{
         while(!sg.isDataEmpty()){ 
             StationData sd = sg.getNextStationData();
             trainStation.totalTrains ++;
+            Statistics.getInstance().incrementTrains();
             Time arrivalTime = sd.getArrivalTime();
             Time departureTime = sd.getDepartureTime();
             Week schedule = sd.getWeek();
@@ -78,17 +75,16 @@ public class TrainGenerator extends ExternalEvent{
                         localDepartureTime = localDepartureTime.add(new Time(-7 * 24, 0, 0));
                     }
                     Train localTrain = generateTrain(sd, localArrivalTime, localDepartureTime);
-                    Statistics.getInstance().incrementTrains();
                     switch (sd.getAddInfo()) { // 0 = no info, 1 = startingStation, 2 = endingStation
                         case 1:
-                            trainListPickUpPassangers.put(localArrivalTime, localTrain); System.out.println("c1 ");
+                            trainListPickUpPassangers.put(localArrivalTime, localTrain);
                             trainListNotGeneratePassangers.put(localArrivalTime, localTrain);
                             break;
                         case 2:
-                            trainListGeneratePassangers.put(localArrivalTime, localTrain);System.out.println("C2 ");
+                            trainListGeneratePassangers.put(localArrivalTime, localTrain);
                             break;
                         default:
-                            trainListPickUpPassangers.put(localArrivalTime, localTrain);System.out.println("def ");
+                            trainListPickUpPassangers.put(localArrivalTime, localTrain);
                             trainListGeneratePassangers.put(localArrivalTime, localTrain);
                             break;
                     }
