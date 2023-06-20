@@ -61,7 +61,14 @@ public class PassengerTransferEvent extends Event<Passanger>{
                     traveler.setArrivalTrack(traveler.connectingTrain.getActualArrivalTrack());
                     traveler.actualTravelTime += 1;
                     PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to wait", isCurrent());
-                    pte.schedule(traveler, new TimeSpan(1.0));
+
+                    // check if Simulation time if after the arrival time of the train
+                    if (futureTrain.getActualArrivalTime().toTimeInstant().getTimeAsDouble() <= model.presentTime().getTimeAsDouble()) {
+                        // if so, schedule the event to be executed in 1 minutes
+                        pte.schedule(traveler, new TimeSpan(1.0));
+                    } else
+                        // Schedule the event to be executed when the train arrives or 
+                        pte.schedule(traveler, futureTrain.getActualArrivalTime().toTimeInstant());
                 }
             }
 
