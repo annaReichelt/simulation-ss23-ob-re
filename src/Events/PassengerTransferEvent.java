@@ -28,7 +28,8 @@ public class PassengerTransferEvent extends Event<Passanger>{
         if (traveler.targetTrack != traveler.getArrivalTrack()) {
             Logger.getInstance().log("Passanger " + traveler.getName() + " needs to change track from  " + traveler.getArrivalTrack() + " to " + traveler.targetTrack);
             traveler.setArrivalTrack(traveler.targetTrack);
-            traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeSpan(4.0, TimeUnit.MINUTES));
+            PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to change tracks", isCurrent());
+            pte.schedule(traveler, new TimeSpan(4.0, TimeUnit.MINUTES));
         
         } else {
             Train trainOnTrack = model.getTrackNo(traveler.getArrivalTrack()).getTrainOnTrack();
@@ -44,13 +45,14 @@ public class PassengerTransferEvent extends Event<Passanger>{
                     //TODO: Travel time increase
                     Logger.getInstance().log("Passanger " + traveler.getName() + " on correct track " + traveler.getArrivalTrack() + " but train isnt.");
                     traveler.setArrivalTrack(traveler.connectingTrain.getActualArrivalTrack());
-                    traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeSpan(3.0, TimeUnit.MINUTES));
+                    PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to wait", isCurrent());
+                    pte.schedule(traveler, new TimeSpan(1.0, TimeUnit.MINUTES));
                 }
             }
 
             //Passanger on correct track, Train on correct track
             if (trainOnTrack == futureTrain) {
-                
+
                 //further time delays that come from the train will be added through the train itself
                 futureTrain.addPassangerToTrain(traveler);
                 Logger.getInstance().log("Passanger " + traveler.getName() + " transferred successfully.");
