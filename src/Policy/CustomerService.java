@@ -59,6 +59,7 @@ public class CustomerService {
             if (p.isTrainMissed()) {
                 p.decreaseHappiness(Happiness.CANCELED_MALUS.getValue());
                 this.model.addLossesFromRefunds(Refund.CANCELED_REFUND.getValue() * ticketPrice);
+                Statistics.getInstance().missedTrains += 1;
             
             } else if (travelDelay <= Delays.NO_DELAY.getValue()) {
                 //nothing happens...

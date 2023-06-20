@@ -176,9 +176,8 @@ public class TrainStation extends Model{
 
         trainStationExperiment.finish();
 
-
+        System.out.println("Anzahl der Simulierten Züge: " + trainStationModel.totalTrains);
         CustomerService.GetInstance().runStatistics();
-        System.out.println(trainStationModel.totalTrains);
         System.out.println("Revenue: " + revenewFromTicketSales);
         System.out.println("Losses: " + lossesFromRefunds);
         System.out.println("Profit: " + getProfit());
