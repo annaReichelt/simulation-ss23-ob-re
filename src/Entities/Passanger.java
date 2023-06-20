@@ -35,7 +35,7 @@ public class Passanger extends Entity {
     public int targetTrack;
     
     public Passanger(Model owner, String name, boolean showInTrace) {
-        super(owner, name, showInTrace);
+        super(owner, name, Config.TRACE_PASSANGERS.getBool());
         this.StationModel = (TrainStation) owner;
         CustomerService.GetInstance().addTraveler(this);
     }

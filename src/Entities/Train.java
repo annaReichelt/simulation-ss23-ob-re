@@ -22,7 +22,7 @@ public class Train extends Entity{
 
     //TODO: Simplify contructor - Perhaps by using the TrainID which links back to RouteData where all of the blanks will be filled in
     public Train(Model owner, String name, boolean showInTrace,  Time arrivalTime, int arrivalTrack, Time expectedDepartureTime) {
-        super(owner, name, showInTrace);
+        super(owner, name, Config.TRACE_TRAINS.getBool());
         this.station = (TrainStation) owner;
         this.expectedArrivalTime = arrivalTime;
         this.expectedArrivalTrack = arrivalTrack;

@@ -22,10 +22,9 @@ public class TrainDepartureEvent extends Event<Train>{
 
         //setting track free actually works
         Track usedTrack = model.getTrackNo(train.getActualArrivalTrack()); 
-        Logger.getInstance().log("Train " + train.getName() + "was removed from station. TrackNo" + usedTrack.getTrackNo() + "is set to " + usedTrack.isFree());
-        
         usedTrack.setFree(true);
         usedTrack.setTrainOnTrack(null);
+        Logger.getInstance().log("Train " + train.getName() + "was removed from station. TrackNo" + usedTrack.getTrackNo() + "is free: " + usedTrack.isFree());
 
         if(!model.trainQueue.isEmpty()) {
             Train nextTrain = model.trainQueue.first();
