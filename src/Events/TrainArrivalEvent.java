@@ -26,7 +26,7 @@ public class TrainArrivalEvent extends Event<Train>{
         int trackNumber = train.getActualArrivalTrack();
         if(model.isTrackAvailable(trackNumber)) { 
 
-            Logger.getInstance().log("Train " + train.getName() + "target track is free. Setting track to unavailable.");
+            Logger.getInstance().log("Train " + train.getName() + "target track is free. Setting " + train.getActualArrivalTrack() + " to unavailable.");
             model.getTrackNo(trackNumber).setFree(false);
             model.getTrackNo(trackNumber).setTrainOnTrack(train);
             

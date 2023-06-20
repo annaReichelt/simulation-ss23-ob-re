@@ -166,6 +166,7 @@ public class TrainStation extends Model{
 
         
         TrainStation trainStationModel = new TrainStation(null, "TrainStation", true, true);
+        Logger.getInstance().addModel(trainStationModel);
 
         trainStationModel.connectToExperiment(trainStationExperiment);
 
