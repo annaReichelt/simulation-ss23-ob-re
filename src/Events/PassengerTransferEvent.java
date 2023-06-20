@@ -23,6 +23,12 @@ public class PassengerTransferEvent extends Event<Passanger>{
     public void eventRoutine(Passanger traveler) {
 
         Logger.getInstance().log("Creating new transfere event for " + traveler.getName());
+        // check if train is departured
+        if (traveler.connectingTrain.isTrainDeparted()) {
+            Logger.getInstance().log("Passanger " + traveler.getName() + " missed his train.");
+            traveler.trainMissed();
+            return;
+        }
 
         //Passanger is not on right track
         if (traveler.targetTrack != traveler.getArrivalTrack()) {

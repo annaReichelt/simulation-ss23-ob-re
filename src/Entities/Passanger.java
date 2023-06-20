@@ -26,6 +26,7 @@ public class Passanger extends Entity {
     private TrainStation StationModel;
     public Train connectingTrain = null;
     private boolean trainIsCanceled = false;
+    private boolean trainMissed = false;
 
     //0 = Salzburg is endstation, 1 = Continues travel in CURRENT train, 2 = needs to transfere to a differen train
     private int travelRouteAttribute;   
@@ -144,5 +145,7 @@ public class Passanger extends Entity {
     public Train getConnectingTrain() { return this.connectingTrain; }
     public void cancelTrain() { this.trainIsCanceled = true; }
     public boolean isTrainCanceled() { return this.trainIsCanceled; }
+    public void trainMissed() { this.trainMissed = true; }
+    public boolean isTrainMissed() { return this.trainMissed; }
 
 }
