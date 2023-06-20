@@ -8,7 +8,7 @@ import src.*;
 import src.Entities.*;
 
 public class TrainArrivalEvent extends Event<Train>{
-    
+
     private TrainStation model;
 
     // Konstruktor
@@ -24,12 +24,12 @@ public class TrainArrivalEvent extends Event<Train>{
     public void eventRoutine(Train train) {
 
         int trackNumber = train.getActualArrivalTrack();
-        if(model.isTrackAvailable(trackNumber)) { 
+        if(model.isTrackAvailable(trackNumber)) {
 
             Logger.getInstance().log("Train " + train.getName() + "target track is free. Setting " + train.getActualArrivalTrack() + " to unavailable.");
             model.getTrackNo(trackNumber).setFree(false);
             model.getTrackNo(trackNumber).setTrainOnTrack(train);
-            
+
             //Passanger Stuff
             HashSet<Passanger> exitingPassangers = new HashSet<Passanger>();
             int travelType;
@@ -40,7 +40,7 @@ public class TrainArrivalEvent extends Event<Train>{
                 travelType = traveler.getTravelRoutAttribute();
 
                 if (travelType == 0) {
-                    Logger.getInstance().log("Passanger " + traveler.getName() + "is leavin Train. Travel complete.");
+                    Logger.getInstance().log("Passanger " + traveler.getName() + "is leaving Train. Travel complete.");
                     exitingPassangers.add(traveler);
 
                 } else if (travelType == 2) {
@@ -49,7 +49,7 @@ public class TrainArrivalEvent extends Event<Train>{
                     Logger.getInstance().log("Passanger " + traveler.getName() + "needs to change train.");
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
                     pTransferEvent.eventRoutine(traveler);
-                
+
                 } else if (travelType == 1) {
                     Logger.getInstance().log("Passanger " + traveler.getName() + "stays seated.");
                 } else {
@@ -76,7 +76,7 @@ public class TrainArrivalEvent extends Event<Train>{
         }
         else {
             int newTrackNo = model.getFreeTrackNo();
-            if(newTrackNo == -1) { 
+            if(newTrackNo == -1) {
                 // no free track available
                 model.trainQueue.insert(train);
                 //TODO: Added time needs to be recorded
