@@ -135,6 +135,14 @@ public class Train extends Entity{
         this.isDeparted = true;
     }
 
+    public void setActualArrivalTime(double minutes) {
+        Time incTime = new Time(minutes);
+        if(actualArrivalTime.compareTo(incTime) != 0) {
+            System.out.println("Queing happend");
+            this.actualArrivalTime = incTime;
+        }
+    }
+
     public String toString() {
         return "Train " + getName() + " is expected to arrive at " + expectedArrivalTime + " on track " + expectedArrivalTrack + " and depart at " + expectedDepartureTime + " on track " + actualArrivalTrack + " with " + passengersOnTrain.size() + " passengers on board";
     }

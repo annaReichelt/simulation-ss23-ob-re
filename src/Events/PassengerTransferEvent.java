@@ -57,7 +57,14 @@ public class PassengerTransferEvent extends Event<Passanger>{
                     Logger.getInstance().log("Passanger " + traveler.getName() + " on correct track " + traveler.getArrivalTrack() + " but train isnt.");
                     traveler.setArrivalTrack(traveler.connectingTrain.getActualArrivalTrack());
                     PassengerTransferEvent pte = new PassengerTransferEvent(model, traveler.getName() + "needs to wait", isCurrent());
-                    pte.schedule(traveler, new TimeSpan(1.0));
+
+                    // check if Simulation time if after the arrival time of the train
+                    if (futureTrain.getActualArrivalTime().toTimeInstant().getTimeAsDouble() <= model.presentTime().getTimeAsDouble()) {
+                        // if so, schedule the event to be executed in 1 minutes
+                        pte.schedule(traveler, new TimeSpan(1.0));
+                    } else
+                        // Schedule the event to be executed when the train arrives or 
+                        pte.schedule(traveler, futureTrain.getActualArrivalTime().toTimeInstant());
                 }
             }
 
@@ -67,7 +74,7 @@ public class PassengerTransferEvent extends Event<Passanger>{
                 //further time delays that come from the train will be added through the train itself
                 futureTrain.addPassangerToTrain(traveler);
                 Logger.getInstance().log("Passanger " + traveler.getName() + " transferred successfully.");
-                System.out.println("Passanger transferred successfully");
+                //System.out.println("Passanger transferred successfully");
             }
         }
     }

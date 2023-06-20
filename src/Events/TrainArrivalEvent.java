@@ -31,6 +31,8 @@ public class TrainArrivalEvent extends Event<Train>{
             model.getTrackNo(trackNumber).setFree(false);
             model.getTrackNo(trackNumber).setTrainOnTrack(train);
 
+            train.setActualArrivalTime(model.presentTime().getTimeAsDouble());
+
             //Passanger Stuff
             HashSet<Passanger> exitingPassangers = new HashSet<Passanger>();
             int travelType;
