@@ -7,7 +7,7 @@ import src.*;
 import src.RouteData.*;
 
 public class Train extends Entity{
-    
+
     private HashSet<Passanger> passengersOnTrain = new HashSet<Passanger>();
     public ArrayList<Passanger> futureTravelers = new ArrayList<Passanger>();
     private Time expectedArrivalTime;
@@ -85,6 +85,8 @@ public class Train extends Entity{
     }
 
     public void setActualArrivalTrack(int actualArrivalTrack) {
+        if(actualArrivalTrack != expectedArrivalTrack)
+            System.out.println("Track Chance");
         this.actualArrivalTrack = actualArrivalTrack;
         announceTrackChange();
     }
@@ -93,6 +95,10 @@ public class Train extends Entity{
         actualArrivalTime = actualArrivalTime.add(incTime);
         if(actualArrivalTime.compareTo(actualDepartureTime) > 0) {
             actualDepartureTime = actualArrivalTime;
+        }
+        // make sure the Train has a minimum of 2 Minutes to unload and load passengers
+        if(actualDepartureTime.compareTo(actualArrivalTime.add(new Time(2))) < 0) {
+            actualDepartureTime = actualArrivalTime.add(new Time(2));
         }
         return this.actualArrivalTime;
     }
