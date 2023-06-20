@@ -1,8 +1,6 @@
 package src;
 import java.util.*;
 
-import org.hamcrest.CustomMatcher;
-
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.dist.ContDistUniform;
 import desmoj.core.simulator.*;
@@ -144,6 +142,8 @@ public class TrainStation extends Model{
         delayTime = new ContDistExponential(this, "DelayTime", 3.0, true, true);
         delayTime.setNonNegative(true);
         dist = new ContDistUniform(this, "Dist", 0.0, 1.0, true, true);
+
+
 
         sg = StationGenerator.getInstance();
         this.stationName = sg.getMainsStaion();

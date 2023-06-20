@@ -1,6 +1,5 @@
 package src.Entities;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 import desmoj.core.simulator.*;
@@ -8,7 +7,6 @@ import src.Config;
 import src.TrainStation;
 import src.Policy.CustomerService;
 import src.Policy.Statistics;
-import src.RouteData.Time;
 
 public class Passanger extends Entity {
 
