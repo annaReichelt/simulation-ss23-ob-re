@@ -1,4 +1,5 @@
 package src;
+import java.io.IOException;
 import java.util.*;
 
 import desmoj.core.dist.ContDistExponential;
@@ -182,5 +183,14 @@ public class TrainStation extends Model{
         System.out.println("Losses: " + lossesFromRefunds);
         System.out.println("Profit: " + getProfit());
         Statistics.getInstance().printStats();
+
+        // save values in file values.txt
+        try{
+            FileAppender.appendLineToFile("values.txt", revenewFromTicketSales + ";" + lossesFromRefunds + ";" + getProfit());
+        }
+        catch (IOException e) {
+            System.out.println("Error while saving values to file.");
+        }
+        
     }
 }
