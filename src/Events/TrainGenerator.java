@@ -9,7 +9,7 @@ import src.Policy.Statistics;
 import java.util.*;
 
 public class TrainGenerator extends ExternalEvent{
-    
+
     private TrainStation trainStation;
     private StationGenerator sg;
     private HashMap<Time, Train> trainListNotGeneratePassangers;
@@ -52,7 +52,7 @@ public class TrainGenerator extends ExternalEvent{
 
         tae.schedule(train, train.getActualArrivalTime().toTimeInstant());
         trainStation.trainsToCome.add(train);
-    }    
+    }
 
     private void generateTrainArrivalEvent(Train train) {
 
@@ -67,7 +67,7 @@ public class TrainGenerator extends ExternalEvent{
         trainListNotGeneratePassangers = new HashMap<>();
         trainListGeneratePassangers = new HashMap<>();
         trainListPickUpPassangers = new TreeMap<>();
-        while(!sg.isDataEmpty()){                                                       
+        while(!sg.isDataEmpty()){
             StationData sd = sg.getNextStationData();
             trainStation.totalTrains ++;
             Statistics.getInstance().incrementTrains();
@@ -75,8 +75,8 @@ public class TrainGenerator extends ExternalEvent{
             Time departureTime = sd.getDepartureTime();
             Week schedule = sd.getWeek();
             int day;
-            for(day = 0; day < 1; day++) { 
-                if(schedule.isActive(day)) {                                                                
+            for(day = 0; day < 7; day++) {
+                if(schedule.isActive(day)) {
                     Time localArrivalTime = arrivalTime.add(new Time(day * 24, 0, 0));
                     Time localDepartureTime = departureTime.add(new Time(day * 24, 0, 0));
                     //wrap around after 1 week
