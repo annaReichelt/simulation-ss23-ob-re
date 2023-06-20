@@ -48,7 +48,7 @@ public class TrainArrivalEvent extends Event<Train>{
                     exitingPassangers.add(traveler);
                     Logger.getInstance().log("Passanger " + traveler.getName() + "needs to change train.");
                     PassengerTransferEvent pTransferEvent = new PassengerTransferEvent(model, traveler.getName() + "is changing trains", true);
-                    pTransferEvent.eventRoutine(traveler);
+                    pTransferEvent.schedule(traveler, new TimeSpan(0.0));
                 
                 } else if (travelType == 1) {
                     Logger.getInstance().log("Passanger " + traveler.getName() + "stays seated.");

@@ -20,15 +20,14 @@ public class PassengerTransferEvent extends Event<Passanger>{
     //Assume, only travelers who need to change trains go through this routine
     @Override
     public void eventRoutine(Passanger traveler) {
-        
+
         //Passanger is not on right track
         if (traveler.targetTrack != traveler.getArrivalTrack()) {    
             traveler.setArrivalTrack(traveler.targetTrack);
             traveler.schedule(new PassengerTransferEvent(model, this.getName(), isCurrent()), new TimeInstant(model.presentTime().getTimeAsDouble() + 4, TimeUnit.MINUTES));
         
         } else {
-
-            Train trainOnTrack = model.getMyCurrentTrack(traveler.targetTrack).getTrainOnTrack();
+            Train trainOnTrack = model.getTrackNo(traveler.getArrivalTrack()).getTrainOnTrack();
             Train futureTrain = traveler.getConnectingTrain();
 
             //Passanger on correct track, but train is not

@@ -24,7 +24,6 @@ public class Passanger extends Entity {
     private double ticketPrice;
 
     private TrainStation StationModel;
-    private Train arrTrain;
     private Train connectingTrain = null;
     private boolean trainIsCanceled = false;
 
@@ -60,7 +59,8 @@ public class Passanger extends Entity {
             } else {
                 createRouteWithTrainChange(train, potentialConnectionTrains);
             }   
-        } 
+        }
+        setArrivalTrack(train.getExpectedArrivalTrack());
     }
 
     //No changing train is required | Travel ends in salzburg
@@ -109,6 +109,7 @@ public class Passanger extends Entity {
         this.connectingTrain = potentialConnections.get(0);
         this.travelRouteAttribute = 2;
         Statistics.getInstance().incementRoutesWithTrainChange();
+        this.targetTrack = connectingTrain.getExpectedArrivalTrack();
         subscribeToConnectingTrain(connectingTrain);
         collectTicketPayment();
     }
