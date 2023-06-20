@@ -184,13 +184,28 @@ public class TrainStation extends Model{
         System.out.println("Profit: " + getProfit());
         Statistics.getInstance().printStats();
 
-        // save values in file values.txt
-        try{
-            FileAppender.appendLineToFile("values.txt", revenewFromTicketSales + ";" + lossesFromRefunds + ";" + getProfit());
+        String statline = "";
+        statline += revenewFromTicketSales + ";";
+        statline += lossesFromRefunds + ";";
+        double value = Statistics.getInstance().passangers;
+        statline += value + ";";
+        value = Statistics.getInstance().directRoutes;
+        statline += value + ";";
+        value = Statistics.getInstance().routesWithTrainChange;
+        statline += value + ";";
+        value = Statistics.getInstance().endingInSalzburgRoutes;
+        statline += value + ";";
+        value = CustomerService.GetInstance().avgHappiness;
+        statline += value + ";";
+        value = Statistics.getInstance().missedTrains;
+        statline += value;
+
+        FileAppender fa = new FileAppender();
+        try {
+            fa.appendLineToFile("simulation-ss23-ob-re\\src\\stats_Policy_1.txt", statline);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        catch (IOException e) {
-            System.out.println("Error while saving values to file.");
-        }
-        
     }
 }

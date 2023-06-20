@@ -3,12 +3,12 @@ package src.Policy;
 public class Statistics {
     
     //Singleton stats collector
-    int passangers = 0;
-    int trains = 0;
-    int directRoutes = 0;
-    int endingInSalzburgRoutes = 0;
-    int routesWithTrainChange = 0;
-    int missedTrains = 0; 
+    public int passangers = 0;
+    public int trains = 0;
+    public int directRoutes = 0;
+    public int endingInSalzburgRoutes = 0;
+    public int routesWithTrainChange = 0;
+    public int missedTrains = 0; 
 
     private static Statistics stats = null;
 

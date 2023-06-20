@@ -37,7 +37,7 @@ public class TrainGenerator extends ExternalEvent{
 
         double pasNum;
         Random rd = new Random();
-        pasNum = rd.nextGaussian()*500;
+        pasNum = rd.nextGaussian() * 500;
 
         for (int i = 0; i < pasNum; i++) {
             createPassanger("Passanger #" + i, train);

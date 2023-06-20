@@ -11,7 +11,7 @@ public class CustomerService {
     private static CustomerService cs;
 
     int totalDelay = 0;
-    double avgHappiness = 0;
+    public double avgHappiness = 0;
 
     private HashSet<Passanger> travelers = new HashSet<Passanger>();
     private TrainStation model;
