@@ -1,10 +1,10 @@
 package src;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 
 import desmoj.core.dist.ContDistExponential;
 import desmoj.core.simulator.*;
-import desmoj.extensions.visualization2d.engine.model.Statistic;
+//import desmoj.extensions.visualization2d.engine.model.Statistic;
+import desmoj.core.simulator.Queue;
 import src.Entities.*;
 import src.RouteData.*;
 import src.Events.*;
@@ -19,10 +19,10 @@ public class TrainStation extends Model{
     private StationGenerator sg;
     public int totalTrains = 0;
 
-    private Track[] trainTracks;
+    private Map<Integer, Track> trainTracks;
     public HashSet<Train> trainsToCome;
 
-    /*public TrainStation(Model owner, String name, boolean showInReport, 
+    /*public TrainStation(Model owner, String name, boolean showInReport,
             boolean showIntrace, String stationName, int amountOfTracks) {
         super(owner, name, showInReport, showIntrace);
         this.stationName = stationName;
@@ -30,25 +30,18 @@ public class TrainStation extends Model{
         createTracksPrimitive(amountOfTracks);
     }*/
 
-    public TrainStation(Model owner, String name, boolean showInReport, 
+    public TrainStation(Model owner, String name, boolean showInReport,
             boolean showIntrace) {
         // implemention with real Data
         super(owner, name, showInReport, showIntrace);
     }
 
-    private void createTracksPrimitive(int amountOfTracks) {
-        this.trainTracks = new Track[amountOfTracks];
-        for (int i = 0; i < trainTracks.length; i++) {
-            trainTracks[i] = new Track(this, "Track " + (i+1), true, i+1);
+    private void createTracks(ArrayList<Integer> trackIDs) {
+        this.trainTracks = new HashMap<Integer, Track>();
+        for (int i : trackIDs) {
+            trainTracks.put(i, new Track(this, "Track " + i, true, i));
         }
-    }
 
-    private void createTracks(int amountOfTracks) {
-        this.trainTracks = new Track[amountOfTracks];
-        ArrayList<Integer> trackIDs = sg.getTrackIDs();
-        for (int i = 0; i < trainTracks.length; i++) {
-            trainTracks[i] = new Track(this, "Track " + trackIDs.get(i), true, trackIDs.get(i));
-        }
     }
 
     /**
@@ -57,46 +50,33 @@ public class TrainStation extends Model{
      * @return track with specified number (ID) iff it exists.
      */
     public Track getTrackNo(int number) {
-        for (Track track : trainTracks) {
-            if (track.getTrackNo() == number)
-                return track;
-        }
-        return null;
+        return trainTracks.get(number);
     }
 
 
 
     public Track whereIsTrainStanding(Train train) {
-
-        for (Track track : trainTracks) {
-            if (track.getTrainOnTrack() == train) {
-                return track;
-            }
-        }
-        return null;
+        int id = train.getActualArrivalTrack();
+        return trainTracks.get(id);
     }
 
     public Track getMyCurrentTrack(int trackNum) {
-        for (Track track : trainTracks) {
-            if (track.getTrackNo() == trackNum) {
-                return track;
-            }
+        Track t = getTrackNo(trackNum);
+        if (t != null) {
+            return t;
         }
         throw new Error("The track you were looking for dosn't exist. Looked for Track #" + trackNum);
     }
 
     public boolean isTrackAvailable(int trackNo) {
-        for(Track track : trainTracks) {
-            if(track.getTrackNo() == trackNo) {
-                return track.isFree();
-            }
-        }
-        return false;
+        return getTrackNo(trackNo).isFree();
     }
 
     public int getFreeTrackNo() {
-        for (int i = 0; i < trainTracks.length; i++) {
-            if (trainTracks[i].isFree()) return i+1;
+        for (Track t : trainTracks.values()) {
+            if (t.isFree()) {
+                return t.getTrackNo();
+            }
         }
         return -1;
     }
@@ -124,7 +104,7 @@ public class TrainStation extends Model{
     public Queue<Train> trainQueue;
 
     public String description() {
-        return "This model describes a train station with " + trainTracks.length + " tracks.";
+        return "This model describes a train station with " + trainTracks.size() + " tracks.";
     }
 
     public void doInitialSchedules() {
@@ -154,7 +134,7 @@ public class TrainStation extends Model{
 
         sg = StationGenerator.getInstance();
         this.stationName = sg.getMainsStaion();
-        createTracks(sg.getTrackNumber());
+        createTracks(sg.getTrackIDs());
     }
 
     public static void main(String[] args) {
@@ -164,7 +144,7 @@ public class TrainStation extends Model{
     	// Otherwise your simulation will crash!!
         Experiment trainStationExperiment = new Experiment("TrainStationExperiment");
 
-        
+
         TrainStation trainStationModel = new TrainStation(null, "TrainStation", true, true);
 
         trainStationModel.connectToExperiment(trainStationExperiment);
@@ -179,7 +159,7 @@ public class TrainStation extends Model{
         trainStationExperiment.report();
 
         trainStationExperiment.finish();
-        
+
         System.out.println(trainStationModel.totalTrains);
         System.out.println("Revenue: " + getRevenue());
         System.out.println("Losses: " + getRevenue());
