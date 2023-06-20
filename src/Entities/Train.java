@@ -94,10 +94,10 @@ public class Train extends Entity{
         actualArrivalTime = actualArrivalTime.add(incTime);
         if(actualArrivalTime.compareTo(actualDepartureTime) > 0) {
             actualDepartureTime = actualArrivalTime;
-        }
-        // make sure the Train has a minimum of 4 Minutes to unload and load passengers
-        if(actualDepartureTime.compareTo(actualArrivalTime.add(new Time(4))) < 0) {
-            actualDepartureTime = actualArrivalTime.add(new Time(4));
+        } 
+        int delay = Config.MIN_WAIT_TIME.getValue();
+        if(actualDepartureTime.compareTo(actualArrivalTime.add(new Time(delay))) < 0) {
+            actualDepartureTime = actualArrivalTime.add(new Time(delay));
         }
         return this.actualArrivalTime;
     }

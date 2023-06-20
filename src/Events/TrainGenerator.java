@@ -9,7 +9,7 @@ import src.Policy.Statistics;
 import java.util.*;
 
 public class TrainGenerator extends ExternalEvent{
-    
+
     private TrainStation trainStation;
     private StationGenerator sg;
     private HashMap<Time, Train> trainListNotGeneratePassangers;
@@ -56,7 +56,7 @@ public class TrainGenerator extends ExternalEvent{
 
         tae.schedule(train, train.getActualArrivalTime().toTimeInstant());
         trainStation.trainsToCome.add(train);
-    }    
+    }
 
     private void generateTrainArrivalEvent(Train train) {
 
@@ -71,7 +71,7 @@ public class TrainGenerator extends ExternalEvent{
         trainListNotGeneratePassangers = new HashMap<>();
         trainListGeneratePassangers = new HashMap<>();
         trainListPickUpPassangers = new TreeMap<>();
-        while(!sg.isDataEmpty()){                                                       
+        while(!sg.isDataEmpty()){
             StationData sd = sg.getNextStationData();
             trainStation.totalTrains ++;
             Statistics.getInstance().incrementTrains();
