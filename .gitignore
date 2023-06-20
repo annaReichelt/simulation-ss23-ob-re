@@ -1,4 +1,6 @@
 schalter1_e
 schalter1-ereignis_*
 .vscode
+.idea
 Events_copy
+out
